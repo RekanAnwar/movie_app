@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app/pages/pages.dart';
+import 'package:movie_app/themes/themes.dart';
 
 void main() {
   runApp(const MovieApp());
@@ -10,8 +11,13 @@ class MovieApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: HomePage(),
+    final textTheme = ThemeData(fontFamily: 'NimbusSans').textTheme;
+    final materialTheme = MaterialTheme(textTheme);
+
+    return MaterialApp(
+      theme: materialTheme.light(),
+      darkTheme: materialTheme.dark(),
+      home: const HomePage(),
     );
   }
 }
