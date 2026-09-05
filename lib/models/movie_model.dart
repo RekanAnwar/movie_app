@@ -41,8 +41,8 @@ class Movie extends Equatable {
   String get fullBackdropUrl =>
       backdropPath != null ? '${Urls.backdropUrl}$backdropPath' : '';
 
-  String genreNames(List<Genre> genres) => genreIds
+  List<String> genreNames(List<Genre> genres) => genreIds
       .map((e) => genres.firstWhereOrNull((genre) => genre.id == e.id)?.name)
       .whereType<String>()
-      .join(' • ');
+      .toList();
 }

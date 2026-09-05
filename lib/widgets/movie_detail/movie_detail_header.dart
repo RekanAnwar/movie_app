@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:extensions_plus/extensions_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -175,12 +174,7 @@ class _GenreChips extends ConsumerWidget {
 
     return genresFuture.when(
       data: (genres) {
-        final genreNames = movie.genreIds
-            .map(
-              (e) => genres.firstWhereOrNull((genre) => genre.id == e.id)?.name,
-            )
-            .whereType<String>()
-            .toList();
+        final genreNames = movie.genreNames(genres);
 
         if (genreNames.isEmpty) return const SizedBox.shrink();
 

@@ -99,7 +99,7 @@ class SearchResultTile extends ConsumerWidget {
                             children: [
                               const SizedBox(height: 6),
                               Text(
-                                movie.genreNames(allGenres),
+                                movie.genreNames(allGenres).join(' • '),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: context.bodySmall?.copyWith(
