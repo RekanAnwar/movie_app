@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:movie_app/gen/gen.dart';
 import 'package:movie_app/models/models.dart';
 import 'package:movie_app/pages/pages.dart';
 import 'package:movie_app/providers/providers.dart';
@@ -97,7 +98,13 @@ class _FeaturedMovieCard extends StatelessWidget {
               movie.fullBackdropUrl,
               fit: BoxFit.cover,
               alignment: Alignment.topCenter,
-              errorBuilder: (_, _, _) => ColoredBox(color: context.grey800),
+              errorBuilder: (context, error, stackTrace) =>
+                  Assets.images.moviePosterPlaceholder.image(
+                    fit: BoxFit.cover,
+                    color: context.grey300,
+                    width: double.infinity,
+                    height: double.infinity,
+                  ),
             ),
             const DecoratedBox(
               decoration: BoxDecoration(

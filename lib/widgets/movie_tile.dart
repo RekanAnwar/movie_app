@@ -1,6 +1,7 @@
 import 'package:extensions_plus/extensions_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:movie_app/gen/gen.dart';
 import 'package:movie_app/models/models.dart';
 import 'package:movie_app/pages/movie_detail_page.dart';
 import 'package:movie_app/utils/utils.dart';
@@ -48,9 +49,16 @@ class MovieTile extends StatelessWidget {
                 height: height,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) => Container(
-                  width: width,
-                  height: height,
-                  child: ColoredBox(color: context.grey800),
+                  decoration: BoxDecoration(
+                    color: context.surface,
+                    border: Border.all(color: context.grey300),
+                    borderRadius: const BorderRadius.all(Radius.circular(16)),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Assets.images.filmStripPlaceholder.image(
+                    width: width - 2,
+                    height: height - 2,
+                  ),
                 ),
               ),
             ),

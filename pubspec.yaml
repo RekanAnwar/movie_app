@@ -27,6 +27,8 @@ dependencies:
   talker_dio_logger: ^5.1.20
 
 dev_dependencies:
+  build_runner: ^2.15.1
+  flutter_gen_runner: ^5.15.0
   flutter_launcher_icons: ^0.14.4
   flutter_lints: ^6.0.0
   flutter_test:
@@ -37,6 +39,7 @@ flutter:
 
   assets:
     - assets/logos/
+    - assets/images/
     - .env
 
   fonts:

@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:movie_app/constants/constants.dart';
 import 'package:movie_app/models/genres_model.dart';
@@ -39,4 +40,9 @@ class Movie extends Equatable {
       posterPath != null ? '${Urls.imageUrl}$posterPath' : '';
   String get fullBackdropUrl =>
       backdropPath != null ? '${Urls.backdropUrl}$backdropPath' : '';
+
+  String genreNames(List<Genre> genres) => genreIds
+      .map((e) => genres.firstWhereOrNull((genre) => genre.id == e.id)?.name)
+      .whereType<String>()
+      .join(' • ');
 }

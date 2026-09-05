@@ -3,6 +3,7 @@ import 'package:extensions_plus/extensions_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:movie_app/gen/gen.dart';
 import 'package:movie_app/models/models.dart';
 import 'package:movie_app/providers/providers.dart';
 import 'package:movie_app/utils/utils.dart';
@@ -29,7 +30,12 @@ class MovieDetailHeader extends StatelessWidget {
             width: double.infinity,
             height: double.infinity,
             errorBuilder: (context, error, stackTrace) =>
-                ColoredBox(color: context.grey800),
+                Assets.images.moviePosterPlaceholder.image(
+                  fit: BoxFit.cover,
+                  color: context.grey300,
+                  width: double.infinity,
+                  height: double.infinity,
+                ),
           ),
           DecoratedBox(
             decoration: BoxDecoration(
@@ -99,8 +105,18 @@ class _MovieDetailInfo extends StatelessWidget {
             width: 120,
             height: 160,
             fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) =>
-                ColoredBox(color: context.grey800),
+            errorBuilder: (context, error, stackTrace) => Container(
+              decoration: BoxDecoration(
+                color: context.surface,
+                border: Border.all(color: context.grey300),
+                borderRadius: const BorderRadius.all(Radius.circular(16)),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Assets.images.filmStripPlaceholder.image(
+                width: 98,
+                height: 158,
+              ),
+            ),
           ),
         ),
         const SizedBox(width: 16),
