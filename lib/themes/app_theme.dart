@@ -117,19 +117,17 @@ class MaterialTheme {
 
   ThemeData theme(ColorScheme colorScheme) => ThemeData(
     useMaterial3: true,
-    textTheme: textTheme,
     colorScheme: colorScheme,
     brightness: colorScheme.brightness,
+    textTheme: textTheme.apply(
+      bodyColor: colorScheme.onSurface,
+      displayColor: colorScheme.onSurface,
+    ),
+    appBarTheme: AppBarThemeData(
+      scrolledUnderElevation: 0,
+      backgroundColor: colorScheme.surface,
+    ),
     // HACK: remove these if you do not these
-    // textTheme: textTheme.apply(
-    //   bodyColor: colorScheme.onSurfaceVariant,
-    //   displayColor: colorScheme.onSurfaceVariant,
-    // ),
-    // appBarTheme: AppBarThemeData(
-    //   centerTitle: true,
-    //   scrolledUnderElevation: 0,
-    //   backgroundColor: colorScheme.surfaceContainerLowest,
-    // ),
     // sliderTheme: const SliderThemeData(
     //   trackHeight: 3,
     //   overlayShape: RoundSliderOverlayShape(
