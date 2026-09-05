@@ -44,21 +44,24 @@ class MovieDetailPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
-                Text(
-                  'Overview',
-                  style: context.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
+                if (movie.overview.isNotEmpty) ...[
+                  Text(
+                    'Overview',
+                    style: context.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  movie.overview,
-                  style: context.bodyMedium?.copyWith(
-                    color: context.grey700,
+                  const SizedBox(height: 12),
+                  Text(
+                    movie.overview,
+                    style: context.bodyMedium?.copyWith(
+                      color: context.grey700,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                const MovieDetailSimilarSection(),
+                  const SizedBox(height: 16),
+                ],
+                MovieDetailSimilarSection(movieId: movie.id),
+                SizedBox(height: context.paddingBottom + 16),
               ],
             ),
           ),

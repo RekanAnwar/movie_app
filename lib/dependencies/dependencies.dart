@@ -20,8 +20,8 @@ final dioProvider = Provider<Dio>(
         TalkerDioLogger(
           talker: talker,
           settings: const TalkerDioLoggerSettings(
+            printResponseTime: true,
             printRequestHeaders: true,
-            printResponseHeaders: true,
           ),
         ),
       );
@@ -35,4 +35,9 @@ final dioProvider = Provider<Dio>(
 final movieRepositoryProvider = Provider<MovieRepository>(
   (ref) => MovieRepository(ref.read(dioProvider)),
   name: 'movieRepositoryProvider',
+);
+
+final genreRepositoryProvider = Provider<GenreRepository>(
+  (ref) => GenreRepository(ref.read(dioProvider)),
+  name: 'genreRepositoryProvider',
 );

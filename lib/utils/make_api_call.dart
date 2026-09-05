@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:movie_app/utils/logging.dart';
 import 'package:movie_app/utils/result.dart';
 
 Future<Result<T>> makeApiCall<T>(
@@ -18,10 +19,14 @@ Future<Result<T>> makeApiCall<T>(
     );
 
     return Result.success(data);
-  } on TimeoutException catch (error) {
+  } on TimeoutException catch (error, stackTrace) {
+    talker.handle(error, stackTrace, kTimeoutMessage);
+
     return Result.failure(error.message ?? kTimeoutMessage);
-  } catch (error) {
+  } catch (error, stackTrace) {
     final result = onError?.call(error);
+
+    talker.handle(error, stackTrace, defaultErrorMessage);
 
     return result ?? Result.failure(defaultErrorMessage);
   }

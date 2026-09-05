@@ -2,6 +2,7 @@ import 'package:extensions_plus/extensions_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/pages/search_page.dart';
 import 'package:movie_app/pages/watchlist_page.dart';
+import 'package:movie_app/providers/providers.dart';
 import 'package:movie_app/utils/utils.dart';
 import 'package:movie_app/widgets/featured_movies_carousel.dart';
 import 'package:movie_app/widgets/movie_horizontal_section.dart';
@@ -75,15 +76,30 @@ class HomePage extends StatelessWidget {
           const SizedBox(height: 16).toSliver,
           const FeaturedMoviesCarousel().toSliver,
           const SizedBox(height: 16).toSliver,
-          const MovieHorizontalSection(title: 'Trending Now').toSliver,
+          const MovieHorizontalSection(
+            title: 'Trending Now',
+            moviesType: MoviesType.trending,
+          ).toSliver,
           const SizedBox(height: 16).toSliver,
-          const MovieHorizontalSection(title: 'Popular').toSliver,
+          const MovieHorizontalSection(
+            title: 'Popular',
+            moviesType: MoviesType.popular,
+          ).toSliver,
           const SizedBox(height: 16).toSliver,
-          const MovieHorizontalSection(title: 'Now Playing').toSliver,
+          const MovieHorizontalSection(
+            title: 'Now Playing',
+            moviesType: MoviesType.nowPlaying,
+          ).toSliver,
           const SizedBox(height: 16).toSliver,
-          const MovieHorizontalSection(title: 'Upcoming').toSliver,
+          const MovieHorizontalSection(
+            title: 'Upcoming',
+            moviesType: MoviesType.upcoming,
+          ).toSliver,
           const SizedBox(height: 16).toSliver,
-          const MovieHorizontalSection(title: 'Top Rated').toSliver,
+          const MovieHorizontalSection(
+            title: 'Top Rated',
+            moviesType: MoviesType.topRated,
+          ).toSliver,
           SizedBox(height: context.paddingBottom + 32).toSliver,
         ],
       ),

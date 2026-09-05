@@ -8,11 +8,9 @@ class SearchResultTile extends StatelessWidget {
   const SearchResultTile({
     super.key,
     required this.movie,
-    this.runtime = '2h 42m',
   });
 
   final Movie movie;
-  final String runtime;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +67,7 @@ class SearchResultTile extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '${movie.releaseDate.year} • $runtime',
+                    '${movie.releaseDate?.year ?? ''}',
                     style: context.bodySmall?.copyWith(
                       color: context.grey600,
                     ),

@@ -1,15 +1,18 @@
 import 'package:extensions_plus/extensions_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:movie_app/models/models.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:movie_app/providers/providers.dart';
 import 'package:movie_app/widgets/movie_tile.dart';
 
 class MovieHorizontalSection extends StatelessWidget {
   const MovieHorizontalSection({
     super.key,
     required this.title,
+    required this.moviesType,
   });
 
   final String title;
+  final MoviesType moviesType;
 
   @override
   Widget build(BuildContext context) {
@@ -28,29 +31,35 @@ class MovieHorizontalSection extends StatelessWidget {
         const SizedBox(height: 12),
         SizedBox(
           height: 210,
-          child: ListView.separated(
-            itemCount: 10,
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            separatorBuilder: (context, index) => const SizedBox(width: 20),
-            itemBuilder: (context, index) => MovieTile(
-              movie: Movie(
-                id: index,
-                title: 'Movie $index',
-                overview: 'Overview $index',
-                voteAverage: 8.5,
-                releaseDate: DateTime.now(),
-                genreIds: [
-                  const Genre(id: 1, name: 'Action'),
-                  const Genre(id: 2, name: 'Adventure'),
-                  const Genre(id: 3, name: 'Fantasy'),
-                ],
-                posterPath:
-                    'https://image.tmdb.org/t/p/w500/sw7mordbZxgITU877yTpZCud90M.jpg',
-                backdropPath:
-                    'https://image.tmdb.org/t/p/w500/kXfqcdQKsToO0OUXHcrrNCHDBzO.jpg',
-              ),
-            ),
+          child: Consumer(
+            builder: (context, ref, child) {
+              final moviesFuture = ref.watch(
+                moviesFutureProvider(
+                  MoviesFutureProviderParams(
+                    moviesType: moviesType,
+                  ),
+                ),
+              );
+
+              return moviesFuture.when(
+                data: (paginatedResponse) {
+                  final movies = paginatedResponse.data;
+
+                  return ListView.separated(
+                    itemCount: 10,
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(width: 20),
+                    itemBuilder: (context, index) => MovieTile(
+                      movie: movies[index],
+                    ),
+                  );
+                },
+                error: (error, stackTrace) => const SizedBox.shrink(),
+                loading: () => const SizedBox.shrink(),
+              );
+            },
           ),
         ),
       ],

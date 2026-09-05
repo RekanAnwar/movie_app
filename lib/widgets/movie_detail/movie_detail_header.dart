@@ -1,6 +1,10 @@
+import 'package:collection/collection.dart';
 import 'package:extensions_plus/extensions_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:movie_app/models/models.dart';
+import 'package:movie_app/providers/providers.dart';
 import 'package:movie_app/utils/utils.dart';
 
 class MovieDetailHeader extends StatelessWidget {
@@ -20,7 +24,7 @@ class MovieDetailHeader extends StatelessWidget {
         clipBehavior: Clip.none,
         children: [
           Image.network(
-            movie.backdropPath ?? '',
+            movie.fullBackdropUrl,
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
@@ -91,7 +95,7 @@ class _MovieDetailInfo extends StatelessWidget {
         ClipRRect(
           borderRadius: const BorderRadius.all(Radius.circular(16)),
           child: Image.network(
-            movie.posterPath ?? '',
+            movie.fullPosterUrl,
             width: 120,
             height: 160,
             fit: BoxFit.cover,
@@ -124,8 +128,7 @@ class _MovieDetailInfo extends StatelessWidget {
                   Flexible(
                     child: Text(
                       '${movie.voteAverage.toStringAsFixed(1)}'
-                      '  •  ${movie.releaseDate.year}'
-                      '  •  2h 49m',
+                      '${movie.releaseDate != null ? '  •  ${DateFormat('yyyy').format(movie.releaseDate!)}' : ''}',
                       style: context.bodyMedium?.copyWith(
                         fontWeight: FontWeight.w500,
                       ),
@@ -135,39 +138,66 @@ class _MovieDetailInfo extends StatelessWidget {
               ),
               if (movie.genreIds.isNotEmpty) ...[
                 const SizedBox(height: 12),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    for (final genre in movie.genreIds)
-                      if (genre.name != null && genre.name!.isNotEmpty)
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 6,
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: context.grey300),
-                            color: context.grey200,
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(100),
-                            ),
-                          ),
-                          child: Text(
-                            genre.name!,
-                            style: context.labelMedium?.copyWith(
-                              color: context.grey700,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                  ],
-                ),
+                _GenreChips(movie: movie),
               ],
             ],
           ),
         ),
       ],
+    );
+  }
+}
+
+class _GenreChips extends ConsumerWidget {
+  const _GenreChips({required this.movie});
+
+  final Movie movie;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final genresFuture = ref.watch(genresFutureProvider);
+
+    return genresFuture.when(
+      data: (genres) {
+        final genreNames = movie.genreIds
+            .map(
+              (e) => genres.firstWhereOrNull((genre) => genre.id == e.id)?.name,
+            )
+            .whereType<String>()
+            .toList();
+
+        if (genreNames.isEmpty) return const SizedBox.shrink();
+
+        return Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            for (final name in genreNames)
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
+                decoration: BoxDecoration(
+                  border: Border.all(color: context.grey300),
+                  color: context.grey200,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(100),
+                  ),
+                ),
+                child: Text(
+                  name,
+                  style: context.labelMedium?.copyWith(
+                    color: context.grey700,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
+      error: (error, stackTrace) => const SizedBox.shrink(),
+      loading: () => const SizedBox.shrink(),
     );
   }
 }

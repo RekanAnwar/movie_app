@@ -63,18 +63,13 @@ class MovieRepository {
     defaultErrorMessage: 'Failed to search movies',
   );
 
-  Future<Result<Movie>> getMovieDetails({required int id}) => makeApiCall(
-    () async {
-      final response = await _dio.get(
-        'movie/$id',
-        queryParameters: {'append_to_response': 'similar'},
-      );
-
-      final responseData = response.data as Map<String, dynamic>;
-
-      return MovieMapper.fromJson(responseData);
-    },
-    defaultErrorMessage: 'Failed to load movie',
+  Future<Result<PaginatedResponse<Movie>>> getSimilarMovies({
+    required int id,
+    int page = 1,
+  }) => _getMovies(
+    path: 'movie/$id/similar',
+    queryParameters: {'page': page},
+    defaultErrorMessage: 'Failed to load similar movies',
   );
 
   Future<Result<PaginatedResponse<Movie>>> _getMovies({
@@ -83,12 +78,7 @@ class MovieRepository {
     required String defaultErrorMessage,
   }) => makeApiCall(
     () async {
-      final response = await _dio.get(
-        path,
-        queryParameters: {
-          ...queryParameters,
-        },
-      );
+      final response = await _dio.get(path, queryParameters: queryParameters);
 
       final responseData = response.data as Map<String, dynamic>;
 
@@ -99,6 +89,7 @@ class MovieRepository {
 
       final data = results
           .map((e) => MovieMapper.fromJson(e as Map<String, dynamic>))
+          .whereType<Movie>()
           .toList();
 
       return PaginatedResponse<Movie>(
