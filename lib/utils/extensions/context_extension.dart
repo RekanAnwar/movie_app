@@ -40,15 +40,4 @@ extension ContextExt on BuildContext {
   Color get secondary700 => _colorScheme.secondary.withValues(alpha: 0.7);
   Color get secondary800 => _colorScheme.secondary.withValues(alpha: 0.8);
   Color get secondary900 => _colorScheme.secondary.withValues(alpha: 0.9);
-
-  MediaQueryData get mediaQuery => MediaQuery.of(this);
-
-  double get viewInsetsTop => mediaQuery.viewInsets.top;
-  // HACK: check these, do you need them?
-  // double get viewInsetsBottom => mediaQuery.viewInsets.bottom;
-  // double get viewInsetsLeft => mediaQuery.viewInsets.left;
-  // double get viewInsetsRight => mediaQuery.viewInsets.right;
-
-  double get paddingLeft => mediaQuery.padding.left;
-  double get paddingRight => mediaQuery.padding.right;
 }

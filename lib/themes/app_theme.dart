@@ -141,43 +141,5 @@ class MaterialTheme {
         ),
       ),
     ),
-    // HACK: remove these if you do not these
-    // sliderTheme: const SliderThemeData(
-    //   trackHeight: 3,
-    //   overlayShape: RoundSliderOverlayShape(
-    //     overlayRadius: 15,
-    //   ),
-    // ),
-    // actionIconTheme: ActionIconThemeData(
-    //   backButtonIconBuilder: (context) => IconButton(
-    //     onPressed: () => Navigator.pop(context),
-    //     icon: Icon(
-    //       Icons.arrow_back_rounded,
-    //       color: context.bodyMedium?.color,
-    //     ),
-    //   ),
-    // ),
-    // drawerTheme: DrawerThemeData(
-    //   backgroundColor: colorScheme.surface,
-    //   shape: const RoundedRectangleBorder(),
-    // ),
-    // inputDecorationTheme: InputDecorationThemeData(
-    //   filled: true,
-    //   fillColor: colorScheme.surfaceContainerLowest,
-    //   prefixIconColor: colorScheme.outlineVariant,
-    //   hintStyle: textTheme.bodyLarge?.copyWith(
-    //     color: colorScheme.outlineVariant,
-    //   ),
-    //   border: OutlineInputBorder(
-    //     borderSide: BorderSide(color: colorScheme.outlineVariant),
-    //     borderRadius: const BorderRadius.all(Radius.circular(24)),
-    //   ),
-    //   enabledBorder: OutlineInputBorder(
-    //     borderSide: BorderSide(color: colorScheme.outlineVariant),
-    //     borderRadius: const BorderRadius.all(Radius.circular(24)),
-    //   ),
-    // ),
-    // scaffoldBackgroundColor: colorScheme.surfaceContainerLowest,
-    // canvasColor: colorScheme.surface,
   );
 }

@@ -51,15 +51,9 @@ class MovieRepository {
   Future<Result<PaginatedResponse<Movie>>> searchMovies({
     required String query,
     int page = 1,
-    // HACK: check this parameter
-    bool includeAdult = false,
   }) => _getMovies(
     path: 'search/movie',
-    queryParameters: {
-      'query': query,
-      'page': page,
-      'include_adult': includeAdult,
-    },
+    queryParameters: {'query': query, 'page': page},
     defaultErrorMessage: 'Failed to search movies',
   );
 
