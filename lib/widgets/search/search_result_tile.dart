@@ -36,6 +36,7 @@ class SearchResultTile extends ConsumerWidget {
                 width: 80,
                 height: 100,
                 fit: BoxFit.cover,
+                alignment: Alignment.topCenter,
                 errorBuilder: (context, error, stackTrace) => Container(
                   decoration: BoxDecoration(
                     color: context.surface,

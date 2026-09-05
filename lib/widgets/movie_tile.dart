@@ -48,6 +48,7 @@ class MovieTile extends StatelessWidget {
                 width: width,
                 height: height,
                 fit: BoxFit.cover,
+                alignment: Alignment.topCenter,
                 errorBuilder: (context, error, stackTrace) => Container(
                   decoration: BoxDecoration(
                     color: context.surface,

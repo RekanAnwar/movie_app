@@ -104,6 +104,7 @@ class _MovieDetailInfo extends StatelessWidget {
             width: 120,
             height: 160,
             fit: BoxFit.cover,
+            alignment: Alignment.topCenter,
             errorBuilder: (context, error, stackTrace) => Container(
               decoration: BoxDecoration(
                 color: context.surface,
