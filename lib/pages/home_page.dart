@@ -1,5 +1,6 @@
 import 'package:extensions_plus/extensions_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:movie_app/pages/search_page.dart';
 import 'package:movie_app/utils/utils.dart';
 import 'package:movie_app/widgets/featured_movies_carousel.dart';
 import 'package:movie_app/widgets/movie_horizontal_section.dart';
@@ -39,6 +40,11 @@ class HomePage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: TextField(
+              onTap: () => showSearch(
+                context: context,
+                delegate: SearchPage(),
+              ),
+              readOnly: true,
               decoration: InputDecoration(
                 filled: true,
                 fillColor: context.surfaceContainer,
@@ -46,16 +52,16 @@ class HomePage extends StatelessWidget {
                 hintStyle: context.bodyMedium?.copyWith(color: context.grey500),
                 prefixIcon: Icon(Icons.search_rounded, color: context.grey500),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: context.grey200),
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(color: context.grey200),
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: context.primaryContainer),
+                  borderSide: BorderSide(color: context.grey200),
+                  borderRadius: const BorderRadius.all(Radius.circular(12)),
                 ),
               ),
             ),

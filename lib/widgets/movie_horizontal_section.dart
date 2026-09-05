@@ -20,7 +20,7 @@ class MovieHorizontalSection extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             title,
-            style: context.titleLarge?.copyWith(
+            style: context.titleMedium?.copyWith(
               fontWeight: FontWeight.w600,
             ),
           ),
