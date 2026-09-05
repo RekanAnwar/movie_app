@@ -5,9 +5,16 @@ import 'package:movie_app/pages/movie_detail_page.dart';
 import 'package:movie_app/utils/utils.dart';
 
 class MovieTile extends StatelessWidget {
-  const MovieTile({super.key, required this.movie});
+  const MovieTile({
+    super.key,
+    required this.movie,
+    this.width = 140,
+    this.height = 160,
+  });
 
   final Movie movie;
+  final double width;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
@@ -29,28 +36,31 @@ class MovieTile extends StatelessWidget {
           ),
         ),
       ),
-      borderRadius: const BorderRadius.all(Radius.circular(16)),
+      borderRadius: const BorderRadius.all(Radius.circular(6)),
       child: SizedBox(
-        width: 120,
+        width: width,
         child: Column(
           children: [
             ClipRRect(
               borderRadius: const BorderRadius.all(Radius.circular(16)),
               child: Image.network(
                 movie.backdropPath ?? '',
-                width: 120,
-                height: 160,
+                width: width,
+                height: height,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) =>
-                    ColoredBox(color: context.grey800),
+                errorBuilder: (context, error, stackTrace) => Container(
+                  width: width,
+                  height: height,
+                  child: ColoredBox(color: context.grey800),
+                ),
               ),
             ),
             const SizedBox(height: 6),
             SizedBox(
-              width: 120,
+              width: width,
               child: Text(
                 movie.title,
-                maxLines: 2,
+                maxLines: 1,
                 textAlign: TextAlign.center,
                 overflow: TextOverflow.ellipsis,
                 style: context.bodyMedium?.copyWith(

@@ -27,7 +27,7 @@ class MovieHorizontalSection extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         SizedBox(
-          height: 230,
+          height: 210,
           child: ListView.separated(
             itemCount: 10,
             scrollDirection: Axis.horizontal,

@@ -1,6 +1,7 @@
 import 'package:extensions_plus/extensions_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/pages/search_page.dart';
+import 'package:movie_app/pages/watchlist_page.dart';
 import 'package:movie_app/utils/utils.dart';
 import 'package:movie_app/widgets/featured_movies_carousel.dart';
 import 'package:movie_app/widgets/movie_horizontal_section.dart';
@@ -26,7 +27,12 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const WatchlistPage(),
+                    ),
+                  ),
                   icon: Icon(
                     Icons.bookmark_border_rounded,
                     color: context.primaryContainer,
@@ -78,7 +84,7 @@ class HomePage extends StatelessWidget {
           const MovieHorizontalSection(title: 'Upcoming').toSliver,
           const SizedBox(height: 16).toSliver,
           const MovieHorizontalSection(title: 'Top Rated').toSliver,
-          const SizedBox(height: 16).toSliver,
+          SizedBox(height: context.paddingBottom + 32).toSliver,
         ],
       ),
     );
