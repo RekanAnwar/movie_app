@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 extension ContextExt on BuildContext {
   ColorScheme get _colorScheme => Theme.of(this).colorScheme;
 
+  bool get isDark => _colorScheme.brightness == Brightness.dark;
+
   Color get grey10 => _colorScheme.inverseSurface.withValues(alpha: 0.01);
   Color get grey20 => _colorScheme.inverseSurface.withValues(alpha: 0.02);
   Color get grey30 => _colorScheme.inverseSurface.withValues(alpha: 0.03);

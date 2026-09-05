@@ -21,7 +21,7 @@ class HomePage extends StatelessWidget {
                 Text(
                   'Discover Movies',
                   style: context.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 IconButton(

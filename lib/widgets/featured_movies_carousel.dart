@@ -104,9 +104,8 @@ class _FeaturedMovieCard extends StatelessWidget {
                   child: Text(
                     'FEATURED',
                     style: context.labelSmall?.copyWith(
-                      height: 1.2,
                       letterSpacing: 1,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w700,
                       color: context.onPrimaryFixed,
                     ),
                   ),
@@ -118,7 +117,7 @@ class _FeaturedMovieCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: context.titleLarge?.copyWith(
                     color: Colors.white,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 const SizedBox(height: 4),

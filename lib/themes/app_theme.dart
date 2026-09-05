@@ -127,6 +127,20 @@ class MaterialTheme {
       scrolledUnderElevation: 0,
       backgroundColor: colorScheme.surface,
     ),
+    filledButtonTheme: FilledButtonThemeData(
+      style: FilledButton.styleFrom(
+        minimumSize: const Size(64, 48),
+        foregroundColor: colorScheme.onPrimaryFixed,
+        backgroundColor: colorScheme.primaryContainer,
+        textStyle: textTheme.titleLarge?.copyWith(
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+        ),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+        ),
+      ),
+    ),
     // HACK: remove these if you do not these
     // sliderTheme: const SliderThemeData(
     //   trackHeight: 3,
@@ -161,15 +175,6 @@ class MaterialTheme {
     //   enabledBorder: OutlineInputBorder(
     //     borderSide: BorderSide(color: colorScheme.outlineVariant),
     //     borderRadius: const BorderRadius.all(Radius.circular(24)),
-    //   ),
-    // ),
-
-    // filledButtonTheme: FilledButtonThemeData(
-    //   style: FilledButton.styleFrom(
-    //     minimumSize: const Size(64, 48),
-    //     textStyle: textTheme.labelLarge?.copyWith(
-    //       fontWeight: FontWeight.w600,
-    //     ),
     //   ),
     // ),
     // scaffoldBackgroundColor: colorScheme.surfaceContainerLowest,

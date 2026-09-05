@@ -11,7 +11,7 @@ class MovieApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = ThemeData(fontFamily: 'Vazirmatn').textTheme;
+    final textTheme = ThemeData(fontFamily: 'Poppins').textTheme;
     final materialTheme = MaterialTheme(textTheme);
 
     return MaterialApp(
