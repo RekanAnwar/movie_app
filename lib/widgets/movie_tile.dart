@@ -36,7 +36,10 @@ class MovieTile extends StatelessWidget {
                 builder: (context) => MovieDetailPage(movie: movie),
               ),
             ),
-      borderRadius: const BorderRadius.all(Radius.circular(6)),
+      borderRadius: const BorderRadius.vertical(
+        top: Radius.circular(16),
+        bottom: Radius.circular(6),
+      ),
       child: SizedBox(
         width: width,
         child: Column(
