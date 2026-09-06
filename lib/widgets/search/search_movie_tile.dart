@@ -116,16 +116,13 @@ class SearchMovieTile extends ConsumerWidget {
                       .read(watchlistNotifierProvider.notifier)
                       .toggle(movie),
                   style: IconButton.styleFrom(
-                    side: BorderSide(color: context.primaryContainer),
+                    iconSize: 28,
                     foregroundColor: context.primaryContainer,
-                    minimumSize: const Size(40, 40),
-                    padding: EdgeInsets.zero,
                   ),
                   icon: Icon(
                     isInWatchlist
                         ? Icons.bookmark_rounded
                         : Icons.bookmark_border_rounded,
-                    size: 20,
                   ),
                 );
               },
