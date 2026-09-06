@@ -87,27 +87,22 @@ class HomePage extends ConsumerWidget {
             ).toSliver,
             const SizedBox(height: 16).toSliver,
             const FeaturedMoviesCarousel().toSliver,
-            const SizedBox(height: 20).toSliver,
             const MovieHorizontalSection(
               title: 'Trending Now',
               moviesType: MoviesType.trending,
             ).toSliver,
-            const SizedBox(height: 20).toSliver,
             const MovieHorizontalSection(
               title: 'Popular',
               moviesType: MoviesType.popular,
             ).toSliver,
-            const SizedBox(height: 20).toSliver,
             const MovieHorizontalSection(
               title: 'Now Playing',
               moviesType: MoviesType.nowPlaying,
             ).toSliver,
-            const SizedBox(height: 20).toSliver,
             const MovieHorizontalSection(
               title: 'Upcoming',
               moviesType: MoviesType.upcoming,
             ).toSliver,
-            const SizedBox(height: 20).toSliver,
             const MovieHorizontalSection(
               title: 'Top Rated',
               moviesType: MoviesType.topRated,

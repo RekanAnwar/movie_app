@@ -27,55 +27,58 @@ class FeaturedMoviesCarousel extends HookConsumerWidget {
       ),
     );
 
-    return moviesFuture.whenAnimated(
-      data: (paginatedResponse) {
-        final movies = paginatedResponse.data.take(5).toList();
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: moviesFuture.whenAnimated(
+        data: (paginatedResponse) {
+          final movies = paginatedResponse.data.take(5).toList();
 
-        return Column(
-          key: const ValueKey('featured-movies-carousel'),
-          children: [
-            CarouselSlider.builder(
-              itemCount: movies.length,
-              itemBuilder: (context, index, _) => Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: _FeaturedMovieCard(movie: movies[index]),
-              ),
-              options: CarouselOptions(
-                onPageChanged: (index, _) {
-                  if (currentIndex.value == index) return;
+          return Column(
+            key: const ValueKey('featured-movies-carousel'),
+            children: [
+              CarouselSlider.builder(
+                itemCount: movies.length,
+                itemBuilder: (context, index, _) => Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: _FeaturedMovieCard(movie: movies[index]),
+                ),
+                options: CarouselOptions(
+                  onPageChanged: (index, _) {
+                    if (currentIndex.value == index) return;
 
-                  currentIndex.value = index;
-                },
-                height: 220,
-                autoPlay: true,
-                enlargeFactor: 0.15,
-                viewportFraction: 0.9,
-                clipBehavior: Clip.none,
-                enlargeCenterPage: true,
-              ),
-            ),
-            const SizedBox(height: 12),
-            ValueListenableBuilder<int>(
-              valueListenable: currentIndex,
-              builder: (context, activeIndex, _) => AnimatedSmoothIndicator(
-                count: movies.length,
-                activeIndex: activeIndex,
-                effect: ExpandingDotsEffect(
-                  spacing: 6,
-                  dotWidth: 8,
-                  dotHeight: 8,
-                  expansionFactor: 2.5,
-                  dotColor: context.grey300,
-                  activeDotColor: context.primaryContainer,
+                    currentIndex.value = index;
+                  },
+                  height: 220,
+                  autoPlay: true,
+                  enlargeFactor: 0.15,
+                  viewportFraction: 0.9,
+                  clipBehavior: Clip.none,
+                  enlargeCenterPage: true,
                 ),
               ),
-            ),
-          ],
-        );
-      },
-      error: (error, stackTrace) => const SizedBox.shrink(),
-      loading: () => const _FeaturedMoviesCarouselShimmer(
-        key: ValueKey('featured-movies-carousel-shimmer'),
+              const SizedBox(height: 12),
+              ValueListenableBuilder<int>(
+                valueListenable: currentIndex,
+                builder: (context, activeIndex, _) => AnimatedSmoothIndicator(
+                  count: movies.length,
+                  activeIndex: activeIndex,
+                  effect: ExpandingDotsEffect(
+                    spacing: 6,
+                    dotWidth: 8,
+                    dotHeight: 8,
+                    expansionFactor: 2.5,
+                    dotColor: context.grey300,
+                    activeDotColor: context.primaryContainer,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+        error: (error, stackTrace) => const SizedBox.shrink(),
+        loading: () => const _FeaturedMoviesCarouselShimmer(
+          key: ValueKey('featured-movies-carousel-shimmer'),
+        ),
       ),
     );
   }
