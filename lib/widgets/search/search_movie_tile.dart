@@ -27,7 +27,6 @@ class SearchMovieTile extends ConsumerWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             MovieNetworkImage(
               imageUrl: movie.fullPosterUrl,
