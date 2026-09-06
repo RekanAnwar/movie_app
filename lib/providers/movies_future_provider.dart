@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_app/dependencies/dependencies.dart';
 import 'package:movie_app/models/models.dart';
 
+const moviesPageSize = 20;
+
 final moviesFutureProvider =
     FutureProvider.family<PaginatedResponse<Movie>, MoviesFutureProviderParams>(
       (ref, params) async {

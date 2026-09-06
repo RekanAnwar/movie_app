@@ -46,15 +46,19 @@ class SearchBody extends HookConsumerWidget {
       return const Center(child: CircularProgressIndicator());
     }
 
-    final searchFuture = ref.watch(
-      searchMoviesFutureProvider(debouncedQuery.value),
+    final firstPageFuture = ref.watch(
+      searchMoviesFutureProvider(
+        SearchMoviesFutureProviderParams(
+          query: debouncedQuery.value,
+        ),
+      ),
     );
 
-    return searchFuture.when(
-      data: (paginatedResponse) {
-        final results = paginatedResponse.data;
+    return firstPageFuture.when(
+      data: (firstPage) {
+        final totalResults = firstPage.totalResults;
 
-        if (results.isEmpty) {
+        if (totalResults == 0) {
           return Center(
             child: Text(
               'No results for "$trimmedQuery"',
@@ -78,7 +82,7 @@ class SearchBody extends HookConsumerWidget {
                     ),
                   ),
                   Text(
-                    '${paginatedResponse.totalResults} results',
+                    '$totalResults results',
                     style: context.bodySmall?.copyWith(
                       color: context.grey600,
                     ),
@@ -87,21 +91,99 @@ class SearchBody extends HookConsumerWidget {
               ),
             ).toSliver,
             SliverList.separated(
-              itemCount: results.length,
-              separatorBuilder: (context, index) => Divider(
-                height: 1,
-                color: context.grey200,
-              ),
-              itemBuilder: (context, index) => SearchResultTile(
-                movie: results[index],
-              ),
+              itemCount: totalResults,
+              separatorBuilder: (context, index) =>
+                  Divider(height: 1, color: context.grey200),
+              itemBuilder: (context, index) {
+                final page = index ~/ moviesPageSize + 1;
+                final indexInPage = index % moviesPageSize;
+
+                final pageFuture = ref.watch(
+                  searchMoviesFutureProvider(
+                    SearchMoviesFutureProviderParams(
+                      query: debouncedQuery.value,
+                      page: page,
+                    ),
+                  ),
+                );
+
+                return pageFuture.when(
+                  data: (pageResponse) {
+                    if (indexInPage >= pageResponse.data.length) {
+                      return const SizedBox.shrink();
+                    }
+
+                    return SearchResultTile(
+                      movie: pageResponse.data[indexInPage],
+                    );
+                  },
+                  error: (error, stackTrace) => indexInPage == 0
+                      ? _SearchPageError(
+                          onRetry: () => ref.invalidate(
+                            searchMoviesFutureProvider(
+                              SearchMoviesFutureProviderParams(
+                                page: page,
+                                query: debouncedQuery.value,
+                              ),
+                            ),
+                          ),
+                        )
+                      : const SizedBox.shrink(),
+                  loading: () => SizedBox(
+                    height: 124,
+                    child: indexInPage == 0
+                        ? const Center(child: CircularProgressIndicator())
+                        : null,
+                  ),
+                );
+              },
             ),
             SizedBox(height: context.paddingBottom + 16).toSliver,
           ],
         );
       },
-      error: (error, stackTrace) => const SizedBox.shrink(),
+      error: (error, stackTrace) => Center(
+        child: _SearchPageError(
+          onRetry: () => ref.invalidate(
+            searchMoviesFutureProvider(
+              SearchMoviesFutureProviderParams(
+                query: debouncedQuery.value,
+              ),
+            ),
+          ),
+        ),
+      ),
       loading: () => const Center(child: CircularProgressIndicator()),
+    );
+  }
+}
+
+class _SearchPageError extends StatelessWidget {
+  const _SearchPageError({required this.onRetry});
+
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Something went wrong',
+            style: context.bodyMedium?.copyWith(color: context.grey600),
+          ),
+          const SizedBox(width: 12),
+          TextButton(
+            onPressed: onRetry,
+            style: TextButton.styleFrom(
+              foregroundColor: context.primaryContainer,
+            ),
+            child: const Text('Retry'),
+          ),
+        ],
+      ),
     );
   }
 }
