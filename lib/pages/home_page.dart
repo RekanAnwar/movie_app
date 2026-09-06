@@ -36,19 +36,19 @@ class HomePage extends ConsumerWidget {
                       fontWeight: FontWeight.w600,
                     ),
                   ),
-                  IconButton(
+                  TextButton.icon(
                     onPressed: () => Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => const WatchlistPage(),
                       ),
                     ),
-                    icon: Icon(
-                      // HACK: change this icon
-                      Icons.bookmark_border_rounded,
-                      color: context.primaryContainer,
-                      size: 28,
+                    style: TextButton.styleFrom(
+                      foregroundColor: context.primaryContainer,
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
                     ),
+                    label: const Text('Watchlist'),
+                    icon: const Icon(Icons.watch_later),
                   ),
                 ],
               ),
