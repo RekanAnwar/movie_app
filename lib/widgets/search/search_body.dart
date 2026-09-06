@@ -6,7 +6,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:movie_app/providers/providers.dart';
 import 'package:movie_app/utils/utils.dart';
-import 'package:movie_app/widgets/search/search_result_tile.dart';
+import 'package:movie_app/widgets/search/search_movie_tile.dart';
 
 class SearchBody extends HookConsumerWidget {
   const SearchBody({
@@ -113,7 +113,7 @@ class SearchBody extends HookConsumerWidget {
                       return const SizedBox.shrink();
                     }
 
-                    return SearchResultTile(
+                    return SearchMovieTile(
                       movie: pageResponse.data[indexInPage],
                     );
                   },

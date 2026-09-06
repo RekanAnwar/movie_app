@@ -7,8 +7,8 @@ import 'package:movie_app/providers/providers.dart';
 import 'package:movie_app/utils/utils.dart';
 import 'package:movie_app/widgets/movie_network_image.dart';
 
-class SearchResultTile extends ConsumerWidget {
-  const SearchResultTile({
+class SearchMovieTile extends ConsumerWidget {
+  const SearchMovieTile({
     super.key,
     required this.movie,
   });

@@ -1,2 +1,2 @@
 export 'search_body.dart';
-export 'search_result_tile.dart';
+export 'search_movie_tile.dart';
