@@ -17,6 +17,14 @@ class MovieHorizontalSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final firstPageFuture = ref.watch(
+      moviesFutureProvider(
+        MoviesFutureProviderParams(
+          moviesType: moviesType,
+        ),
+      ),
+    );
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -34,19 +42,12 @@ class MovieHorizontalSection extends ConsumerWidget {
           height: 210,
           child: Consumer(
             builder: (context, ref, child) {
-              final firstPageFuture = ref.watch(
-                moviesFutureProvider(
-                  MoviesFutureProviderParams(
-                    moviesType: moviesType,
-                  ),
-                ),
-              );
-
-              return firstPageFuture.when(
+              return firstPageFuture.whenAnimated(
                 data: (firstPage) {
                   final totalResults = firstPage.totalResults;
 
                   return ListView.separated(
+                    key: ValueKey('movie-horizontal-section-$moviesType'),
                     itemCount: totalResults,
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -87,7 +88,7 @@ class MovieHorizontalSection extends ConsumerWidget {
                                 ),
                               )
                             : const SizedBox.shrink(),
-                        loading: () => const _MovieTileShimmer(),
+                        loading: () => const MovieTileShimmer(),
                       );
                     },
                   );
@@ -107,13 +108,10 @@ class MovieHorizontalSection extends ConsumerWidget {
                     ),
                   ),
                 ),
-                loading: () => ListView.separated(
-                  itemCount: 4,
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(width: 20),
-                  itemBuilder: (context, index) => const _MovieTileShimmer(),
+                loading: () => _MovieHorizontalSectionShimmer(
+                  key: ValueKey(
+                    'movie-horizontal-section-shimmer-$moviesType',
+                  ),
                 ),
               );
             },
@@ -124,40 +122,17 @@ class MovieHorizontalSection extends ConsumerWidget {
   }
 }
 
-class _MovieTileShimmer extends StatelessWidget {
-  const _MovieTileShimmer();
+class _MovieHorizontalSectionShimmer extends StatelessWidget {
+  const _MovieHorizontalSectionShimmer({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          width: 140,
-          height: 160,
-          decoration: BoxDecoration(
-            color: context.surfaceContainer,
-            borderRadius: const BorderRadius.all(Radius.circular(16)),
-          ),
-        ),
-        const SizedBox(height: 6),
-        Container(
-          width: 100,
-          height: 14,
-          decoration: BoxDecoration(
-            color: context.surfaceContainer,
-            borderRadius: const BorderRadius.all(Radius.circular(4)),
-          ),
-        ),
-        const SizedBox(height: 4),
-        Container(
-          width: 80,
-          height: 12,
-          decoration: BoxDecoration(
-            color: context.surfaceContainer,
-            borderRadius: const BorderRadius.all(Radius.circular(4)),
-          ),
-        ),
-      ],
+    return ListView.separated(
+      itemCount: 5,
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      separatorBuilder: (context, index) => const SizedBox(width: 20),
+      itemBuilder: (context, index) => const MovieTileShimmer(),
     );
   }
 }

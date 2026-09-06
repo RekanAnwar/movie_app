@@ -9,6 +9,7 @@ import 'package:movie_app/pages/pages.dart';
 import 'package:movie_app/providers/providers.dart';
 import 'package:movie_app/utils/utils.dart';
 import 'package:movie_app/widgets/movie_network_image.dart';
+import 'package:movie_app/widgets/wave_shimmer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class FeaturedMoviesCarousel extends HookConsumerWidget {
@@ -16,6 +17,8 @@ class FeaturedMoviesCarousel extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final currentIndex = useValueNotifier(0);
+
     final moviesFuture = ref.watch(
       moviesFutureProvider(
         const MoviesFutureProviderParams(
@@ -24,12 +27,12 @@ class FeaturedMoviesCarousel extends HookConsumerWidget {
       ),
     );
 
-    return moviesFuture.when(
+    return moviesFuture.whenAnimated(
       data: (paginatedResponse) {
-        final currentIndex = useValueNotifier(0);
         final movies = paginatedResponse.data.take(5).toList();
 
         return Column(
+          key: const ValueKey('featured-movies-carousel'),
           children: [
             CarouselSlider.builder(
               itemCount: movies.length,
@@ -38,17 +41,17 @@ class FeaturedMoviesCarousel extends HookConsumerWidget {
                 child: _FeaturedMovieCard(movie: movies[index]),
               ),
               options: CarouselOptions(
+                onPageChanged: (index, _) {
+                  if (currentIndex.value == index) return;
+
+                  currentIndex.value = index;
+                },
                 height: 220,
                 autoPlay: true,
                 enlargeFactor: 0.15,
                 viewportFraction: 0.9,
                 clipBehavior: Clip.none,
                 enlargeCenterPage: true,
-                onPageChanged: (index, _) {
-                  if (currentIndex.value == index) return;
-
-                  currentIndex.value = index;
-                },
               ),
             ),
             const SizedBox(height: 12),
@@ -71,7 +74,62 @@ class FeaturedMoviesCarousel extends HookConsumerWidget {
         );
       },
       error: (error, stackTrace) => const SizedBox.shrink(),
-      loading: () => const SizedBox.shrink(),
+      loading: () => const _FeaturedMoviesCarouselShimmer(
+        key: ValueKey('featured-movies-carousel-shimmer'),
+      ),
+    );
+  }
+}
+
+class _FeaturedMoviesCarouselShimmer extends HookWidget {
+  const _FeaturedMoviesCarouselShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final currentIndex = useValueNotifier(0);
+
+    return Column(
+      children: [
+        CarouselSlider.builder(
+          itemCount: 5,
+          itemBuilder: (context, index, _) => const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 4),
+            child: WaveShimmer(
+              height: 220,
+              radius: 20,
+            ),
+          ),
+          options: CarouselOptions(
+            onPageChanged: (index, _) {
+              if (currentIndex.value == index) return;
+
+              currentIndex.value = index;
+            },
+            height: 220,
+            enlargeFactor: 0.15,
+            viewportFraction: 0.9,
+            clipBehavior: Clip.none,
+            enlargeCenterPage: true,
+            enableInfiniteScroll: false,
+          ),
+        ),
+        const SizedBox(height: 12),
+        ValueListenableBuilder(
+          valueListenable: currentIndex,
+          builder: (context, value, child) => AnimatedSmoothIndicator(
+            count: 5,
+            activeIndex: value,
+            effect: ExpandingDotsEffect(
+              spacing: 6,
+              dotWidth: 8,
+              dotHeight: 8,
+              expansionFactor: 2.5,
+              dotColor: context.grey300,
+              activeDotColor: context.primaryContainer,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

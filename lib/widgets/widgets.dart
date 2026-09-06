@@ -4,3 +4,4 @@ export 'movie_horizontal_section.dart';
 export 'movie_network_image.dart';
 export 'movie_tile.dart';
 export 'search/search.dart';
+export 'wave_shimmer.dart';

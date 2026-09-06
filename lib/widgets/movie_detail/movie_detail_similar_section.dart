@@ -18,13 +18,14 @@ class MovieDetailSimilarSection extends ConsumerWidget {
       ),
     );
 
-    return firstPageFuture.when(
+    return firstPageFuture.whenAnimated(
       data: (firstPage) {
         final totalResults = firstPage.totalResults;
 
         if (totalResults == 0) return const SizedBox.shrink();
 
         return Column(
+          key: ValueKey('similar-movies-$movieId'),
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
@@ -77,7 +78,7 @@ class MovieDetailSimilarSection extends ConsumerWidget {
                             ),
                           )
                         : const SizedBox.shrink(),
-                    loading: () => const _SimilarMovieTileShimmer(),
+                    loading: () => const MovieTileShimmer(),
                   );
                 },
               ),
@@ -86,42 +87,37 @@ class MovieDetailSimilarSection extends ConsumerWidget {
         );
       },
       error: (error, stackTrace) => const SizedBox.shrink(),
-      loading: () => const SizedBox.shrink(),
+      loading: () => _SimilarMoviesSectionShimmer(
+        key: ValueKey('similar-movies-shimmer-$movieId'),
+      ),
     );
   }
 }
 
-class _SimilarMovieTileShimmer extends StatelessWidget {
-  const _SimilarMovieTileShimmer();
+class _SimilarMoviesSectionShimmer extends StatelessWidget {
+  const _SimilarMoviesSectionShimmer({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Container(
-          width: 140,
-          height: 160,
-          decoration: BoxDecoration(
-            color: context.surfaceContainer,
-            borderRadius: const BorderRadius.all(Radius.circular(16)),
+        Text(
+          'Similar Movies',
+          style: context.titleMedium?.copyWith(
+            fontWeight: FontWeight.w600,
           ),
         ),
-        const SizedBox(height: 6),
-        Container(
-          width: 100,
-          height: 14,
-          decoration: BoxDecoration(
-            color: context.surfaceContainer,
-            borderRadius: const BorderRadius.all(Radius.circular(4)),
-          ),
-        ),
-        const SizedBox(height: 4),
-        Container(
-          width: 80,
-          height: 12,
-          decoration: BoxDecoration(
-            color: context.surfaceContainer,
-            borderRadius: const BorderRadius.all(Radius.circular(4)),
+        const SizedBox(height: 12),
+        SizedBox(
+          height: 210,
+          child: ListView.separated(
+            clipBehavior: Clip.none,
+            itemCount: 5,
+            scrollDirection: Axis.horizontal,
+            physics: const NeverScrollableScrollPhysics(),
+            separatorBuilder: (context, index) => const SizedBox(width: 12),
+            itemBuilder: (context, index) => const MovieTileShimmer(),
           ),
         ),
       ],

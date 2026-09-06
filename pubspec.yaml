@@ -24,6 +24,8 @@ dependencies:
   intl: ^0.20.3
   riverpod: ^3.3.2
   shared_preferences: ^2.5.5
+  shimmer: ^3.0.0
+  sliver_tools: ^0.2.12
   smooth_page_indicator: ^3.0.0
   talker: ^5.1.20
   talker_dio_logger: ^5.1.20

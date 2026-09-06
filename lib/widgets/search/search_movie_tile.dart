@@ -6,6 +6,7 @@ import 'package:movie_app/pages/movie_detail_page.dart';
 import 'package:movie_app/providers/providers.dart';
 import 'package:movie_app/utils/utils.dart';
 import 'package:movie_app/widgets/movie_network_image.dart';
+import 'package:movie_app/widgets/wave_shimmer.dart';
 
 class SearchMovieTile extends ConsumerWidget {
   const SearchMovieTile({
@@ -77,13 +78,15 @@ class SearchMovieTile extends ConsumerWidget {
 
                       return genresFuture.when(
                         data: (allGenres) {
-                          movie.genreNames(allGenres);
+                          final names = movie.genreNames(allGenres);
+
+                          if (names.isEmpty) return const SizedBox.shrink();
 
                           return Column(
                             children: [
                               const SizedBox(height: 6),
                               Text(
-                                movie.genreNames(allGenres).join(' • '),
+                                names.join(' • '),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: context.bodySmall?.copyWith(
@@ -129,6 +132,64 @@ class SearchMovieTile extends ConsumerWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class SearchMovieTileShimmer extends StatelessWidget {
+  const SearchMovieTileShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Row(
+        children: [
+          WaveShimmer(
+            width: 80,
+            height: 100,
+            radius: 12,
+          ),
+          SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                WaveShimmer(
+                  width: 100,
+                  height: 20,
+                  radius: 4,
+                ),
+                SizedBox(height: 4),
+                WaveShimmer(
+                  width: 40,
+                  height: 16,
+                  radius: 4,
+                ),
+                SizedBox(height: 6),
+                WaveShimmer(
+                  width: 48,
+                  height: 16,
+                  radius: 4,
+                ),
+                SizedBox(height: 6),
+                WaveShimmer(
+                  width: 140,
+                  height: 16,
+                  radius: 4,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(width: 8),
+          WaveShimmer(
+            width: 40,
+            height: 40,
+            radius: 20,
+          ),
+          SizedBox(width: 4),
+        ],
       ),
     );
   }

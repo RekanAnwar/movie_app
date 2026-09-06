@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:movie_app/models/models.dart';
 import 'package:movie_app/pages/movie_detail_page.dart';
 import 'package:movie_app/widgets/movie_network_image.dart';
+import 'package:movie_app/widgets/wave_shimmer.dart';
 
 class MovieTile extends StatelessWidget {
   const MovieTile({
@@ -125,6 +126,53 @@ class _MovieRating extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class MovieTileShimmer extends StatelessWidget {
+  const MovieTileShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const SizedBox(
+      width: 140,
+      height: 210,
+      child: Column(
+        children: [
+          WaveShimmer(
+            width: 140,
+            height: 160,
+            radius: 16,
+          ),
+          SizedBox(height: 6),
+          WaveShimmer(
+            width: 140,
+            height: 20,
+            radius: 4,
+          ),
+          SizedBox(height: 4),
+          SizedBox(
+            width: 140,
+            height: 20,
+            child: Row(
+              children: [
+                WaveShimmer(
+                  width: 70,
+                  height: 20,
+                  radius: 4,
+                ),
+                Spacer(),
+                WaveShimmer(
+                  radius: 4,
+                  width: 40,
+                  height: 20,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
