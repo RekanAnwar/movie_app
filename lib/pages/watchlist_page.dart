@@ -72,6 +72,25 @@ class WatchlistPage extends StatelessWidget {
                     height: 230,
                     width: double.infinity,
                     movie: movies[index],
+                    topRightAction: IconButton(
+                      onPressed: () => ref
+                          .read(watchlistNotifierProvider.notifier)
+                          .toggle(movies[index]),
+                      style: IconButton.styleFrom(
+                        shape: CircleBorder(
+                          side: BorderSide(color: context.outline),
+                        ),
+                        minimumSize: const Size(40, 40),
+                        backgroundColor: context.surface.withValues(
+                          alpha: 0.85,
+                        ),
+                        foregroundColor: context.primaryContainer,
+                      ),
+                      icon: const Icon(
+                        Icons.bookmark_rounded,
+                        size: 20,
+                      ),
+                    ),
                   ),
                 );
         },

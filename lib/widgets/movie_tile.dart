@@ -12,12 +12,14 @@ class MovieTile extends StatelessWidget {
     this.width = 140,
     this.height = 160,
     this.pushReplacement = false,
+    this.topRightAction,
   });
 
   final Movie movie;
   final double width;
   final double height;
   final bool pushReplacement;
+  final Widget? topRightAction;
 
   @override
   Widget build(BuildContext context) {
@@ -43,11 +45,21 @@ class MovieTile extends StatelessWidget {
         width: width,
         child: Column(
           children: [
-            MovieNetworkImage(
-              width: width,
-              height: height,
-              imageUrl: movie.fullPosterUrl,
-              borderRadius: const BorderRadius.all(Radius.circular(16)),
+            Stack(
+              children: [
+                MovieNetworkImage(
+                  width: width,
+                  height: height,
+                  imageUrl: movie.fullPosterUrl,
+                  borderRadius: const BorderRadius.all(Radius.circular(16)),
+                ),
+                if (topRightAction != null)
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: topRightAction!,
+                  ),
+              ],
             ),
             const SizedBox(height: 6),
             SizedBox(

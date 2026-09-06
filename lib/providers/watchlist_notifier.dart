@@ -26,6 +26,7 @@ class WatchlistNotifier extends Notifier<List<Movie>> {
     state = movies;
 
     final contains = movies.any((m) => m.id == movie.id);
+
     final toast = ref.read(toastNotifierProvider.notifier);
 
     if (contains) {

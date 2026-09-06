@@ -25,14 +25,14 @@ class WatchlistRepository {
   }
 
   Future<List<Movie>> toggle(Movie movie) async {
-    final movies = getMovies();
+    var movies = getMovies();
 
     final contains = movies.any((m) => m.id == movie.id);
 
     if (contains) {
-      await _removeMovie(movie.id);
+      movies = await _removeMovie(movie.id);
     } else {
-      await _addMovie(movie);
+      movies = await _addMovie(movie);
     }
 
     return movies;
