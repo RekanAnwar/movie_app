@@ -1,10 +1,12 @@
 import 'package:extensions_plus/extensions_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:movie_app/gen/gen.dart';
 import 'package:movie_app/pages/search_page.dart';
 import 'package:movie_app/pages/watchlist_page.dart';
 import 'package:movie_app/providers/providers.dart';
 import 'package:movie_app/utils/utils.dart';
+import 'package:movie_app/widgets/empty_state.dart';
 import 'package:movie_app/widgets/featured_movies_carousel.dart';
 import 'package:movie_app/widgets/movie_horizontal_section.dart';
 
@@ -21,6 +23,7 @@ class HomePage extends ConsumerWidget {
           ..invalidate(genresFutureProvider)
           ..invalidate(similarMoviesFutureProvider),
         child: CustomScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -86,28 +89,55 @@ class HomePage extends ConsumerWidget {
               ),
             ).toSliver,
             const SizedBox(height: 16).toSliver,
-            const FeaturedMoviesCarousel().toSliver,
-            const MovieHorizontalSection(
-              title: 'Trending Now',
-              moviesType: MoviesType.trending,
-            ).toSliver,
-            const MovieHorizontalSection(
-              title: 'Popular',
-              moviesType: MoviesType.popular,
-            ).toSliver,
-            const MovieHorizontalSection(
-              title: 'Now Playing',
-              moviesType: MoviesType.nowPlaying,
-            ).toSliver,
-            const MovieHorizontalSection(
-              title: 'Upcoming',
-              moviesType: MoviesType.upcoming,
-            ).toSliver,
-            const MovieHorizontalSection(
-              title: 'Top Rated',
-              moviesType: MoviesType.topRated,
-            ).toSliver,
-            SizedBox(height: context.paddingBottom + 32).toSliver,
+            Consumer(
+              builder: (context, ref, child) {
+                final isMoviesEmpty = ref.watch(
+                  homeMoviesStatusProvider.select(
+                    (status) => status == HomeMoviesStatus.empty,
+                  ),
+                );
+
+                if (isMoviesEmpty) {
+                  return SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: EmptyState(
+                      onRetry: () => ref.invalidate(moviesFutureProvider),
+                      image: Assets.images.emptyMovies,
+                      title: 'No movies found',
+                      description:
+                          'We couldn\'t load any movies right now. Pull to refresh or try again.',
+                    ),
+                  );
+                }
+
+                return SliverMainAxisGroup(
+                  slivers: [
+                    const FeaturedMoviesCarousel().toSliver,
+                    const MovieHorizontalSection(
+                      title: 'Trending Now',
+                      moviesType: MoviesType.trending,
+                    ).toSliver,
+                    const MovieHorizontalSection(
+                      title: 'Popular',
+                      moviesType: MoviesType.popular,
+                    ).toSliver,
+                    const MovieHorizontalSection(
+                      title: 'Now Playing',
+                      moviesType: MoviesType.nowPlaying,
+                    ).toSliver,
+                    const MovieHorizontalSection(
+                      title: 'Upcoming',
+                      moviesType: MoviesType.upcoming,
+                    ).toSliver,
+                    const MovieHorizontalSection(
+                      title: 'Top Rated',
+                      moviesType: MoviesType.topRated,
+                    ).toSliver,
+                    SizedBox(height: context.paddingBottom + 32).toSliver,
+                  ],
+                );
+              },
+            ),
           ],
         ),
       ),

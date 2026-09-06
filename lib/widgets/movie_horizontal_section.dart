@@ -32,6 +32,8 @@ class MovieHorizontalSection extends ConsumerWidget {
         data: (firstPage) {
           final totalResults = firstPage.totalResults;
 
+          if (totalResults == 0) return const SizedBox.shrink();
+
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

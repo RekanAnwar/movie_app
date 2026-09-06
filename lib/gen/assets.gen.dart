@@ -14,6 +14,22 @@ import 'package:flutter/widgets.dart';
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/empty_movies.png
+  AssetGenImage get emptyMovies =>
+      const AssetGenImage('assets/images/empty_movies.png');
+
+  /// File path: assets/images/empty_search.png
+  AssetGenImage get emptySearch =>
+      const AssetGenImage('assets/images/empty_search.png');
+
+  /// File path: assets/images/empty_search_result.png
+  AssetGenImage get emptySearchResult =>
+      const AssetGenImage('assets/images/empty_search_result.png');
+
+  /// File path: assets/images/empty_watchlist.png
+  AssetGenImage get emptyWatchlist =>
+      const AssetGenImage('assets/images/empty_watchlist.png');
+
   /// File path: assets/images/film_strip_placeholder.png
   AssetGenImage get filmStripPlaceholder =>
       const AssetGenImage('assets/images/film_strip_placeholder.png');
@@ -24,6 +40,10 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [
+    emptyMovies,
+    emptySearch,
+    emptySearchResult,
+    emptyWatchlist,
     filmStripPlaceholder,
     moviePosterPlaceholder,
   ];

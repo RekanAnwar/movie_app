@@ -33,6 +33,8 @@ class FeaturedMoviesCarousel extends HookConsumerWidget {
         data: (paginatedResponse) {
           final movies = paginatedResponse.data.take(5).toList();
 
+          if (movies.isEmpty) return const SizedBox.shrink();
+
           return Column(
             key: const ValueKey('featured-movies-carousel'),
             children: [

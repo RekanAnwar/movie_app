@@ -1,6 +1,7 @@
 import 'package:extensions_plus/extensions_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:movie_app/gen/gen.dart';
 import 'package:movie_app/providers/providers.dart';
 import 'package:movie_app/utils/utils.dart';
 import 'package:movie_app/widgets/widgets.dart';
@@ -47,52 +48,54 @@ class WatchlistPage extends StatelessWidget {
         builder: (context, ref, child) {
           final movies = ref.watch(watchlistNotifierProvider);
 
-          return movies.isEmpty
-              ? Center(
-                  child: Text(
-                    'No movies in your watchlist yet',
-                    style: context.bodyMedium?.copyWith(color: context.grey600),
+          if (movies.isEmpty) {
+            return EmptyState(
+              image: Assets.images.emptyWatchlist,
+              title: 'No movies in your watchlist yet',
+              description:
+                  'Your watchlist lets you keep track of movies, even when you\'re offline.',
+            );
+          }
+
+          return GridView.builder(
+            itemCount: movies.length,
+            padding: EdgeInsets.only(
+              left: 16,
+              right: 16,
+              top: 16,
+              bottom: context.paddingBottom + 32,
+            ),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisExtent: 280,
+              mainAxisSpacing: 20,
+              crossAxisSpacing: 16,
+            ),
+            itemBuilder: (context, index) => MovieTile(
+              height: 230,
+              width: double.infinity,
+              movie: movies[index],
+              topRightAction: IconButton(
+                onPressed: () => ref
+                    .read(watchlistNotifierProvider.notifier)
+                    .toggle(movies[index]),
+                style: IconButton.styleFrom(
+                  shape: CircleBorder(
+                    side: BorderSide(color: context.outline),
                   ),
-                )
-              : GridView.builder(
-                  itemCount: movies.length,
-                  padding: EdgeInsets.only(
-                    left: 16,
-                    right: 16,
-                    top: 16,
-                    bottom: context.paddingBottom + 32,
+                  minimumSize: const Size(40, 40),
+                  backgroundColor: context.surface.withValues(
+                    alpha: 0.85,
                   ),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisExtent: 280,
-                    mainAxisSpacing: 20,
-                    crossAxisSpacing: 16,
-                  ),
-                  itemBuilder: (context, index) => MovieTile(
-                    height: 230,
-                    width: double.infinity,
-                    movie: movies[index],
-                    topRightAction: IconButton(
-                      onPressed: () => ref
-                          .read(watchlistNotifierProvider.notifier)
-                          .toggle(movies[index]),
-                      style: IconButton.styleFrom(
-                        shape: CircleBorder(
-                          side: BorderSide(color: context.outline),
-                        ),
-                        minimumSize: const Size(40, 40),
-                        backgroundColor: context.surface.withValues(
-                          alpha: 0.85,
-                        ),
-                        foregroundColor: context.primaryContainer,
-                      ),
-                      icon: const Icon(
-                        Icons.bookmark_rounded,
-                        size: 20,
-                      ),
-                    ),
-                  ),
-                );
+                  foregroundColor: context.primaryContainer,
+                ),
+                icon: const Icon(
+                  Icons.bookmark_rounded,
+                  size: 20,
+                ),
+              ),
+            ),
+          );
         },
       ),
     );
