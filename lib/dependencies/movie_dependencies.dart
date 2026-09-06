@@ -4,7 +4,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_app/constants/constants.dart';
 import 'package:movie_app/repositories/repositories.dart';
 import 'package:movie_app/utils/utils.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:talker_dio_logger/talker_dio_logger.dart';
+
+final sharedPreferencesProvider = Provider<SharedPreferences>(
+  (ref) => throw UnimplementedError(
+    'sharedPreferencesProvider must be overridden in main',
+  ),
+  name: 'sharedPreferencesProvider',
+);
 
 final dioProvider = Provider<Dio>(
   (ref) {
@@ -40,4 +48,9 @@ final movieRepositoryProvider = Provider<MovieRepository>(
 final genreRepositoryProvider = Provider<GenreRepository>(
   (ref) => GenreRepository(ref.read(dioProvider)),
   name: 'genreRepositoryProvider',
+);
+
+final watchlistRepositoryProvider = Provider<WatchlistRepository>(
+  (ref) => WatchlistRepository(ref.read(sharedPreferencesProvider)),
+  name: 'watchlistRepositoryProvider',
 );

@@ -32,7 +32,7 @@ class MovieDetailSimilarSection extends ConsumerWidget {
             ),
             const SizedBox(height: 12),
             SizedBox(
-              height: 230,
+              height: 210,
               child: ListView.separated(
                 clipBehavior: Clip.none,
                 itemCount: similarMovies.length,

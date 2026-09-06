@@ -1,3 +1,4 @@
+import 'package:capsule_toast/capsule_toast.dart';
 import 'package:flutter/material.dart';
 
 class MaterialTheme {
@@ -115,6 +116,33 @@ class MaterialTheme {
     return theme(darkScheme());
   }
 
+  static CapsuleToastThemeData toastTheme(ColorScheme scheme) {
+    final isDark = scheme.brightness == Brightness.dark;
+    final foreground = isDark ? scheme.onSurface : scheme.surface;
+    final secondaryForeground = foreground.withValues(alpha: 0.72);
+
+    return CapsuleToastThemeData(
+      surfaceColor: isDark
+          ? scheme.surfaceContainerHigh
+          : scheme.inverseSurface,
+      foregroundColor: foreground,
+      secondaryForegroundColor: secondaryForeground,
+      borderColor: scheme.outline.withValues(alpha: isDark ? 0.35 : 0.25),
+      borderWidth: 0.5,
+      actionSurfaceColor: foreground.withValues(alpha: 0.12),
+      innerHighlightColor: isDark ? Colors.white.withValues(alpha: 0.10) : null,
+      accents: CapsuleToastAccents(
+        success: scheme.primaryContainer,
+        information: isDark ? scheme.tertiary : scheme.tertiaryContainer,
+        warning: scheme.secondaryContainer,
+        error: scheme.error,
+        loading: secondaryForeground,
+        neutral: secondaryForeground,
+        custom: secondaryForeground,
+      ),
+    );
+  }
+
   ThemeData theme(ColorScheme colorScheme) => ThemeData(
     useMaterial3: true,
     colorScheme: colorScheme,
@@ -141,5 +169,6 @@ class MaterialTheme {
         ),
       ),
     ),
+    extensions: [toastTheme(colorScheme)],
   );
 }

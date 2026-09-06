@@ -2,10 +2,10 @@ import 'package:extensions_plus/extensions_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:movie_app/gen/gen.dart';
 import 'package:movie_app/models/models.dart';
 import 'package:movie_app/providers/providers.dart';
 import 'package:movie_app/utils/utils.dart';
+import 'package:movie_app/widgets/movie_network_image.dart';
 
 class MovieDetailHeader extends StatelessWidget {
   const MovieDetailHeader({
@@ -23,18 +23,11 @@ class MovieDetailHeader extends StatelessWidget {
         fit: StackFit.expand,
         clipBehavior: Clip.none,
         children: [
-          Image.network(
-            movie.fullBackdropUrl,
-            fit: BoxFit.cover,
+          MovieNetworkImage(
             width: double.infinity,
             height: double.infinity,
-            errorBuilder: (context, error, stackTrace) =>
-                Assets.images.moviePosterPlaceholder.image(
-                  fit: BoxFit.cover,
-                  color: context.grey300,
-                  width: double.infinity,
-                  height: double.infinity,
-                ),
+            imageUrl: movie.fullBackdropUrl,
+            placeholder: MovieImagePlaceholder.poster,
           ),
           DecoratedBox(
             decoration: BoxDecoration(
@@ -97,27 +90,11 @@ class _MovieDetailInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        ClipRRect(
+        MovieNetworkImage(
+          imageUrl: movie.fullPosterUrl,
+          width: 120,
+          height: 160,
           borderRadius: const BorderRadius.all(Radius.circular(16)),
-          child: Image.network(
-            movie.fullPosterUrl,
-            width: 120,
-            height: 160,
-            fit: BoxFit.cover,
-            alignment: Alignment.topCenter,
-            errorBuilder: (context, error, stackTrace) => Container(
-              decoration: BoxDecoration(
-                color: context.surface,
-                border: Border.all(color: context.grey300),
-                borderRadius: const BorderRadius.all(Radius.circular(16)),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Assets.images.filmStripPlaceholder.image(
-                width: 98,
-                height: 158,
-              ),
-            ),
-          ),
         ),
         const SizedBox(width: 16),
         Expanded(

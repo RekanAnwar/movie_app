@@ -1,10 +1,9 @@
 import 'package:extensions_plus/extensions_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:movie_app/gen/gen.dart';
 import 'package:movie_app/models/models.dart';
 import 'package:movie_app/pages/movie_detail_page.dart';
-import 'package:movie_app/utils/utils.dart';
+import 'package:movie_app/widgets/movie_network_image.dart';
 
 class MovieTile extends StatelessWidget {
   const MovieTile({
@@ -44,27 +43,11 @@ class MovieTile extends StatelessWidget {
         width: width,
         child: Column(
           children: [
-            ClipRRect(
+            MovieNetworkImage(
+              width: width,
+              height: height,
+              imageUrl: movie.fullPosterUrl,
               borderRadius: const BorderRadius.all(Radius.circular(16)),
-              child: Image.network(
-                movie.fullPosterUrl,
-                width: width,
-                height: height,
-                fit: BoxFit.cover,
-                alignment: Alignment.topCenter,
-                errorBuilder: (context, error, stackTrace) => Container(
-                  decoration: BoxDecoration(
-                    color: context.surface,
-                    border: Border.all(color: context.grey300),
-                    borderRadius: const BorderRadius.all(Radius.circular(16)),
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Assets.images.filmStripPlaceholder.image(
-                    width: width - 2,
-                    height: height - 2,
-                  ),
-                ),
-              ),
             ),
             const SizedBox(height: 6),
             SizedBox(

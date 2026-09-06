@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:movie_app/gen/gen.dart';
 import 'package:movie_app/models/models.dart';
 import 'package:movie_app/pages/pages.dart';
 import 'package:movie_app/providers/providers.dart';
 import 'package:movie_app/utils/utils.dart';
+import 'package:movie_app/widgets/movie_network_image.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class FeaturedMoviesCarousel extends HookConsumerWidget {
@@ -70,8 +70,8 @@ class FeaturedMoviesCarousel extends HookConsumerWidget {
           ],
         );
       },
-      error: (error, stackTrace) => ErrorWidget(error),
-      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, stackTrace) => const SizedBox.shrink(),
+      loading: () => const SizedBox.shrink(),
     );
   }
 }
@@ -93,17 +93,9 @@ class _FeaturedMovieCard extends StatelessWidget {
         child: Stack(
           fit: StackFit.expand,
           children: [
-            Image.network(
-              movie.fullBackdropUrl,
-              fit: BoxFit.cover,
-              alignment: Alignment.topCenter,
-              errorBuilder: (context, error, stackTrace) =>
-                  Assets.images.moviePosterPlaceholder.image(
-                    fit: BoxFit.cover,
-                    color: context.grey300,
-                    width: double.infinity,
-                    height: double.infinity,
-                  ),
+            MovieNetworkImage(
+              imageUrl: movie.fullBackdropUrl,
+              placeholder: MovieImagePlaceholder.poster,
             ),
             const DecoratedBox(
               decoration: BoxDecoration(
@@ -183,18 +175,34 @@ class _FeaturedMovieCard extends StatelessWidget {
                           ],
                         ),
                       ),
-                      IconButton(
-                        onPressed: () {},
-                        style: IconButton.styleFrom(
-                          side: BorderSide(color: context.primaryContainer),
-                          foregroundColor: context.primaryContainer,
-                          minimumSize: const Size(40, 40),
-                          padding: EdgeInsets.zero,
-                        ),
-                        icon: const Icon(
-                          Icons.bookmark_border_rounded,
-                          size: 20,
-                        ),
+                      Consumer(
+                        builder: (context, ref, child) {
+                          final isInWatchlist = ref.watch(
+                            watchlistNotifierProvider.select(
+                              (movies) => movies.any(
+                                (m) => m.id == movie.id,
+                              ),
+                            ),
+                          );
+
+                          return IconButton(
+                            onPressed: () async => ref
+                                .read(watchlistNotifierProvider.notifier)
+                                .toggle(movie),
+                            style: IconButton.styleFrom(
+                              side: BorderSide(color: context.primaryContainer),
+                              foregroundColor: context.primaryContainer,
+                              minimumSize: const Size(40, 40),
+                              padding: EdgeInsets.zero,
+                            ),
+                            icon: Icon(
+                              isInWatchlist
+                                  ? Icons.bookmark_rounded
+                                  : Icons.bookmark_border_rounded,
+                              size: 20,
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
