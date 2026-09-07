@@ -17,12 +17,6 @@ Future<void> main() async {
 
   final sharedPreferences = await SharedPreferences.getInstance();
 
-  FlutterError.presentError = (details) => talker.error(
-    details.exceptionAsString(),
-    details.exception,
-    details.stack,
-  );
-
   FlutterError.onError = (details) => talker.error(
     details.exceptionAsString(),
     details.exception,
