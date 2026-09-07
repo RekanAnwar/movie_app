@@ -115,7 +115,6 @@ class FeaturedMoviesCarouselShimmer extends HookWidget {
               viewportFraction: 0.9,
               clipBehavior: Clip.none,
               enlargeCenterPage: true,
-              enableInfiniteScroll: false,
             ),
           ),
           const SizedBox(height: 12),
