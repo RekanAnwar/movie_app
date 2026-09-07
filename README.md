@@ -1,4 +1,4 @@
-![MOVIE logo](assets/logos/app_icon.png)
+<img src="assets/logos/app_icon.png" alt="MOVIE logo" width="148"/>
 
 # MOVIE
 
