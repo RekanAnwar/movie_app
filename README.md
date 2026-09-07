@@ -1,4 +1,4 @@
-<img src="assets/logos/app_icon.png" alt="MOVIE logo" width="148"/>
+![MOVIE logo](assets/logos/app_icon.png)
 
 # MOVIE
 
@@ -92,7 +92,7 @@ ACCESS_TOKEN=your_tmdb_access_token_here
 flutter run
 ```
 
-Or pick a device / simulator from your IDE and launch from there.
+
 
 ## Project structure
 
@@ -124,7 +124,3 @@ lib/
 ## Offline support
 
 The watchlist is stored with `**shared_preferences**`, so saved movies remain available when the device is offline.
-
-## License
-
-This project is for educational / challenge purposes.
