@@ -22,17 +22,6 @@ class ToastNotifier extends Notifier<CapsuleToastData?> {
     );
   }
 
-  void showWarning({
-    required String title,
-    required String message,
-  }) {
-    state = CapsuleToastData.warning(
-      title: title,
-      message: message,
-      initialMode: CapsuleToastMode.expanded,
-    );
-  }
-
   void showError({
     required String title,
     required String message,
