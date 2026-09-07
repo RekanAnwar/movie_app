@@ -8,6 +8,7 @@ import 'package:movie_app/gen/gen.dart';
 import 'package:movie_app/providers/providers.dart';
 import 'package:movie_app/utils/utils.dart';
 import 'package:movie_app/widgets/empty_state.dart';
+import 'package:movie_app/widgets/error_state.dart';
 import 'package:movie_app/widgets/search/search_movie_tile.dart';
 import 'package:movie_app/widgets/wave_shimmer.dart';
 
@@ -77,8 +78,9 @@ class SearchBody extends HookConsumerWidget {
             totalResults: totalResults,
           );
         },
-        error: (error, stackTrace) => _SearchPageError(
+        error: (error, stackTrace) => ErrorState(
           key: ValueKey('search-error-${debouncedQuery.value}'),
+          error: error,
           onRetry: () => ref.invalidate(
             searchMoviesFutureProvider(
               SearchMoviesFutureProviderParams(
@@ -145,10 +147,8 @@ class _SearchResults extends ConsumerWidget {
             ],
           ),
         ).toSliver,
-        SliverList.separated(
+        SliverList.builder(
           itemCount: totalResults,
-          separatorBuilder: (context, index) =>
-              Divider(height: 1, color: context.grey200),
           itemBuilder: (context, index) {
             final page = index ~/ moviesPageSize + 1;
             final indexInPage = index % moviesPageSize;
@@ -168,23 +168,24 @@ class _SearchResults extends ConsumerWidget {
                   return const SizedBox.shrink();
                 }
 
-                return SearchMovieTile(
-                  movie: pageResponse.data[indexInPage],
+                return Column(
+                  children: [
+                    SearchMovieTile(
+                      movie: pageResponse.data[indexInPage],
+                    ),
+                    if (indexInPage < totalResults - 1)
+                      Divider(height: 1, color: context.grey200),
+                  ],
                 );
               },
-              error: (error, stackTrace) => indexInPage == 0
-                  ? _SearchPageError(
-                      onRetry: () => ref.invalidate(
-                        searchMoviesFutureProvider(
-                          SearchMoviesFutureProviderParams(
-                            page: page,
-                            query: query,
-                          ),
-                        ),
-                      ),
-                    )
-                  : const SizedBox.shrink(),
-              loading: () => const SearchMovieTileShimmer(),
+              error: (error, stackTrace) => const SizedBox.shrink(),
+              loading: () => Column(
+                children: [
+                  const SearchMovieTileShimmer(),
+                  if (indexInPage < totalResults - 1)
+                    Divider(height: 1, color: context.grey200),
+                ],
+              ),
             );
           },
         ),
@@ -228,41 +229,6 @@ class _SearchBodyShimmer extends StatelessWidget {
           itemBuilder: (context, index) => const SearchMovieTileShimmer(),
         ),
       ],
-    );
-  }
-}
-
-class _SearchPageError extends StatelessWidget {
-  const _SearchPageError({
-    super.key,
-    required this.onRetry,
-  });
-
-  final VoidCallback onRetry;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Something went wrong',
-              style: context.bodyMedium?.copyWith(color: context.grey600),
-            ),
-            const SizedBox(width: 12),
-            TextButton(
-              onPressed: onRetry,
-              style: TextButton.styleFrom(
-                foregroundColor: context.primaryContainer,
-              ),
-              child: const Text('Retry'),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

@@ -30,6 +30,10 @@ class $AssetsImagesGen {
   AssetGenImage get emptyWatchlist =>
       const AssetGenImage('assets/images/empty_watchlist.png');
 
+  /// File path: assets/images/error_state.png
+  AssetGenImage get errorState =>
+      const AssetGenImage('assets/images/error_state.png');
+
   /// File path: assets/images/film_strip_placeholder.png
   AssetGenImage get filmStripPlaceholder =>
       const AssetGenImage('assets/images/film_strip_placeholder.png');
@@ -38,14 +42,20 @@ class $AssetsImagesGen {
   AssetGenImage get moviePosterPlaceholder =>
       const AssetGenImage('assets/images/movie_poster_placeholder.png');
 
+  /// File path: assets/images/no_internet_state.png
+  AssetGenImage get noInternetState =>
+      const AssetGenImage('assets/images/no_internet_state.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
     emptyMovies,
     emptySearch,
     emptySearchResult,
     emptyWatchlist,
+    errorState,
     filmStripPlaceholder,
     moviePosterPlaceholder,
+    noInternetState,
   ];
 }
 

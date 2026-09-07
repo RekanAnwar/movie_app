@@ -4,7 +4,7 @@ sealed class Result<T> {
   const factory Result.success(T data) = Success<T>;
 
   const factory Result.failure(
-    String message, {
+    Object error, {
     String? code,
   }) = Failure<T>;
 
@@ -19,17 +19,17 @@ sealed class Result<T> {
 
   String? get messageOrNull => switch (this) {
     Success() => null,
-    Failure(:final message) => message,
+    Failure(:final error) => error.toString(),
   };
 
   R when<R>(
-    R Function(String message) onFailure,
+    R Function(Object error) onFailure,
     R Function(T data) onSuccess,
   );
 
-  void onFailure(void Function(String message) action) {
-    if (this case Failure(:final message)) {
-      action(message);
+  void onFailure(void Function(Object error) action) {
+    if (this case Failure(:final error)) {
+      action(error);
     }
   }
 
@@ -41,7 +41,7 @@ sealed class Result<T> {
 
   T getOrThrow() => switch (this) {
     Success(:final data) => data,
-    Failure(:final message) => throw Exception(message),
+    Failure(:final error) => throw error,
   };
 }
 
@@ -52,20 +52,31 @@ final class Success<T> extends Result<T> {
 
   @override
   R when<R>(
-    R Function(String message) onFailure,
+    R Function(Object error) onFailure,
     R Function(T data) onSuccess,
   ) => onSuccess(data);
 }
 
 final class Failure<T> extends Result<T> {
-  const Failure(this.message, {this.code});
+  const Failure(this.error, {this.code});
 
-  final String message;
+  final Object error;
   final String? code;
 
   @override
   R when<R>(
-    R Function(String message) onFailure,
+    R Function(Object error) onFailure,
     R Function(T data) onSuccess,
-  ) => onFailure(message);
+  ) => onFailure(error);
+}
+
+class NetworkError implements Exception {
+  const NetworkError([
+    this.message = 'No internet connection',
+  ]);
+
+  final Object message;
+
+  @override
+  String toString() => message.toString();
 }

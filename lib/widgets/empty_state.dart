@@ -49,10 +49,10 @@ class EmptyState extends StatelessWidget {
           ),
           if (onRetry != null) ...[
             const SizedBox(height: 16),
-            TextButton(
+            FilledButton(
               onPressed: onRetry,
-              style: TextButton.styleFrom(
-                foregroundColor: context.primaryContainer,
+              style: FilledButton.styleFrom(
+                minimumSize: Size(context.width * 0.4, 48),
               ),
               child: Text(retryLabel),
             ),

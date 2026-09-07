@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:movie_app/mappers/mappers.dart';
 import 'package:movie_app/models/models.dart';
+import 'package:movie_app/utils/logging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class WatchlistRepository {
@@ -16,12 +17,18 @@ class WatchlistRepository {
 
     if (raw == null || raw.isEmpty) return const [];
 
-    final decoded = jsonDecode(raw) as List<dynamic>;
+    try {
+      final decoded = jsonDecode(raw) as List<dynamic>;
 
-    return decoded
-        .map((e) => MovieMapper.fromJson(e))
-        .whereType<Movie>()
-        .toList();
+      return decoded
+          .map((e) => MovieMapper.fromJson(e as Map<String, dynamic>))
+          .whereType<Movie>()
+          .toList();
+    } catch (error, stackTrace) {
+      talker.handle(error, stackTrace, 'Failed to read watchlist');
+
+      return const [];
+    }
   }
 
   Future<List<Movie>> toggle(Movie movie) async {
@@ -61,9 +68,10 @@ class WatchlistRepository {
 
   Future<void> _saveMovies(List<Movie> movies) async {
     final encodedMovies = movies.map(MovieMapper.toJson).toList();
-
     final encoded = jsonEncode(encodedMovies);
 
-    await _prefs.setString(_storageKey, encoded);
+    final saved = await _prefs.setString(_storageKey, encoded);
+
+    if (!saved) throw Exception('Failed to save watchlist');
   }
 }

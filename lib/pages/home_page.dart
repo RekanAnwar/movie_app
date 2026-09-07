@@ -6,22 +6,23 @@ import 'package:movie_app/pages/search_page.dart';
 import 'package:movie_app/pages/watchlist_page.dart';
 import 'package:movie_app/providers/providers.dart';
 import 'package:movie_app/utils/utils.dart';
-import 'package:movie_app/widgets/empty_state.dart';
-import 'package:movie_app/widgets/featured_movies_carousel.dart';
-import 'package:movie_app/widgets/movie_horizontal_section.dart';
+import 'package:movie_app/widgets/widgets.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
+
+  void _refreshProviders(WidgetRef ref) => ref
+    ..invalidate(homeMoviesAsyncNotifierProvider)
+    ..invalidate(moviesFutureProvider)
+    ..invalidate(genresFutureProvider)
+    ..invalidate(similarMoviesFutureProvider);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(toolbarHeight: 0),
       body: RefreshIndicator(
-        onRefresh: () async => ref
-          ..invalidate(moviesFutureProvider)
-          ..invalidate(genresFutureProvider)
-          ..invalidate(similarMoviesFutureProvider),
+        onRefresh: () async => _refreshProviders(ref),
         child: CustomScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           slivers: [
@@ -91,50 +92,71 @@ class HomePage extends ConsumerWidget {
             const SizedBox(height: 16).toSliver,
             Consumer(
               builder: (context, ref, child) {
-                final isMoviesEmpty = ref.watch(
-                  homeMoviesStatusProvider.select(
-                    (status) => status == HomeMoviesStatus.empty,
-                  ),
+                final homeMoviesFuture = ref.watch(
+                  homeMoviesAsyncNotifierProvider,
                 );
 
-                if (isMoviesEmpty) {
-                  return SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: EmptyState(
-                      onRetry: () => ref.invalidate(moviesFutureProvider),
-                      image: Assets.images.emptyMovies,
-                      title: 'No movies found',
-                      description:
-                          'We couldn\'t load any movies right now. Pull to refresh or try again.',
-                    ),
-                  );
-                }
+                return homeMoviesFuture.when(
+                  skipLoadingOnRefresh: homeMoviesFuture.hasValue,
+                  data: (movies) {
+                    if (movies.isEmpty) {
+                      return SliverFillRemaining(
+                        hasScrollBody: false,
+                        child: EmptyState(
+                          onRetry: () => _refreshProviders(ref),
+                          image: Assets.images.emptyMovies,
+                          title: 'No movies found',
+                          description:
+                              'We couldn\'t load any movies right now. Pull to refresh or try again.',
+                        ),
+                      );
+                    }
 
-                return SliverMainAxisGroup(
-                  slivers: [
-                    const FeaturedMoviesCarousel().toSliver,
-                    const MovieHorizontalSection(
-                      title: 'Trending Now',
-                      moviesType: MoviesType.trending,
-                    ).toSliver,
-                    const MovieHorizontalSection(
-                      title: 'Popular',
-                      moviesType: MoviesType.popular,
-                    ).toSliver,
-                    const MovieHorizontalSection(
-                      title: 'Now Playing',
-                      moviesType: MoviesType.nowPlaying,
-                    ).toSliver,
-                    const MovieHorizontalSection(
-                      title: 'Upcoming',
-                      moviesType: MoviesType.upcoming,
-                    ).toSliver,
-                    const MovieHorizontalSection(
-                      title: 'Top Rated',
-                      moviesType: MoviesType.topRated,
-                    ).toSliver,
-                    SizedBox(height: context.paddingBottom + 32).toSliver,
-                  ],
+                    return SliverMainAxisGroup(
+                      slivers: [
+                        const FeaturedMoviesCarousel().toSliver,
+                        const MovieHorizontalSection(
+                          title: 'Trending Now',
+                          moviesType: MoviesType.trending,
+                        ).toSliver,
+                        const MovieHorizontalSection(
+                          title: 'Popular',
+                          moviesType: MoviesType.popular,
+                        ).toSliver,
+                        const MovieHorizontalSection(
+                          title: 'Now Playing',
+                          moviesType: MoviesType.nowPlaying,
+                        ).toSliver,
+                        const MovieHorizontalSection(
+                          title: 'Upcoming',
+                          moviesType: MoviesType.upcoming,
+                        ).toSliver,
+                        const MovieHorizontalSection(
+                          title: 'Top Rated',
+                          moviesType: MoviesType.topRated,
+                        ).toSliver,
+                        SizedBox(height: context.paddingBottom + 32).toSliver,
+                      ],
+                    );
+                  },
+                  error: (error, stackTrace) => SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: ErrorState(
+                      error: error,
+                      onRetry: () => _refreshProviders(ref),
+                    ),
+                  ),
+                  loading: () => SliverMainAxisGroup(
+                    slivers: [
+                      const FeaturedMoviesCarouselShimmer().toSliver,
+                      const MovieHorizontalSectionShimmer().toSliver,
+                      const MovieHorizontalSectionShimmer().toSliver,
+                      const MovieHorizontalSectionShimmer().toSliver,
+                      const MovieHorizontalSectionShimmer().toSliver,
+                      const MovieHorizontalSectionShimmer().toSliver,
+                      SizedBox(height: context.paddingBottom + 32).toSliver,
+                    ],
+                  ),
                 );
               },
             ),

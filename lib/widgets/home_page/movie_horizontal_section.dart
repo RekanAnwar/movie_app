@@ -26,15 +26,18 @@ class MovieHorizontalSection extends ConsumerWidget {
       ),
     );
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
-      child: firstPageFuture.whenAnimated(
-        data: (firstPage) {
-          final totalResults = firstPage.totalResults;
+    return firstPageFuture.when(
+      skipLoadingOnRefresh: firstPageFuture.hasValue,
+      data: (firstPage) {
+        final totalResults = firstPage.totalResults;
 
-          if (totalResults == 0) return const SizedBox.shrink();
+        if (totalResults == 0) {
+          return const SizedBox.shrink();
+        }
 
-          return Column(
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
@@ -50,7 +53,6 @@ class MovieHorizontalSection extends ConsumerWidget {
               SizedBox(
                 height: 210,
                 child: ListView.separated(
-                  key: ValueKey('movie-horizontal-section-$moviesType'),
                   itemCount: totalResults,
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -97,61 +99,46 @@ class MovieHorizontalSection extends ConsumerWidget {
                 ),
               ),
             ],
-          );
-        },
-        error: (error, stackTrace) => Align(
-          alignment: Alignment.centerLeft,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: _MovieTileError(
-              onRetry: () => ref.invalidate(
-                moviesFutureProvider(
-                  MoviesFutureProviderParams(
-                    moviesType: moviesType,
-                  ),
-                ),
-              ),
-            ),
           ),
-        ),
-        loading: () => _MovieHorizontalSectionShimmer(
-          key: ValueKey(
-            'movie-horizontal-section-shimmer-$moviesType',
-          ),
-        ),
-      ),
+        );
+      },
+      error: (error, stackTrace) => const SizedBox.shrink(),
+      loading: () => const MovieHorizontalSectionShimmer(),
     );
   }
 }
 
-class _MovieHorizontalSectionShimmer extends StatelessWidget {
-  const _MovieHorizontalSectionShimmer({super.key});
+class MovieHorizontalSectionShimmer extends StatelessWidget {
+  const MovieHorizontalSectionShimmer();
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: WaveShimmer(
-            width: 114,
-            height: 24,
-            radius: 4,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: WaveShimmer(
+              width: 114,
+              height: 24,
+              radius: 4,
+            ),
           ),
-        ),
-        const SizedBox(height: 12),
-        SizedBox(
-          height: 210,
-          child: ListView.separated(
-            itemCount: 5,
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            separatorBuilder: (context, index) => const SizedBox(width: 20),
-            itemBuilder: (context, index) => const MovieTileShimmer(),
+          const SizedBox(height: 12),
+          SizedBox(
+            height: 210,
+            child: ListView.separated(
+              itemCount: 5,
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              separatorBuilder: (context, index) => const SizedBox(width: 20),
+              itemBuilder: (context, index) => const MovieTileShimmer(),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

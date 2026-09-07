@@ -27,16 +27,16 @@ class FeaturedMoviesCarousel extends HookConsumerWidget {
       ),
     );
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
-      child: moviesFuture.whenAnimated(
-        data: (paginatedResponse) {
-          final movies = paginatedResponse.data.take(5).toList();
+    return moviesFuture.when(
+      skipLoadingOnRefresh: moviesFuture.hasValue,
+      data: (paginatedResponse) {
+        final movies = paginatedResponse.data.take(5).toList();
 
-          if (movies.isEmpty) return const SizedBox.shrink();
+        if (movies.isEmpty) return const SizedBox.shrink();
 
-          return Column(
-            key: const ValueKey('featured-movies-carousel'),
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 20),
+          child: Column(
             children: [
               CarouselSlider.builder(
                 itemCount: movies.length,
@@ -75,66 +75,67 @@ class FeaturedMoviesCarousel extends HookConsumerWidget {
                 ),
               ),
             ],
-          );
-        },
-        error: (error, stackTrace) => const SizedBox.shrink(),
-        loading: () => const _FeaturedMoviesCarouselShimmer(
-          key: ValueKey('featured-movies-carousel-shimmer'),
-        ),
-      ),
+          ),
+        );
+      },
+      error: (error, stackTrace) => const SizedBox.shrink(),
+      loading: () => const FeaturedMoviesCarouselShimmer(),
     );
   }
 }
 
-class _FeaturedMoviesCarouselShimmer extends HookWidget {
-  const _FeaturedMoviesCarouselShimmer({super.key});
+class FeaturedMoviesCarouselShimmer extends HookWidget {
+  const FeaturedMoviesCarouselShimmer();
 
   @override
   Widget build(BuildContext context) {
     final currentIndex = useValueNotifier(0);
 
-    return Column(
-      children: [
-        CarouselSlider.builder(
-          itemCount: 5,
-          itemBuilder: (context, index, _) => const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 4),
-            child: WaveShimmer(
-              height: 220,
-              radius: 20,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Column(
+        children: [
+          CarouselSlider.builder(
+            itemCount: 5,
+            itemBuilder: (context, index, _) => const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 4),
+              child: WaveShimmer(
+                height: 220,
+                radius: 20,
+              ),
             ),
-          ),
-          options: CarouselOptions(
-            onPageChanged: (index, _) {
-              if (currentIndex.value == index) return;
+            options: CarouselOptions(
+              onPageChanged: (index, _) {
+                if (currentIndex.value == index) return;
 
-              currentIndex.value = index;
-            },
-            height: 220,
-            enlargeFactor: 0.15,
-            viewportFraction: 0.9,
-            clipBehavior: Clip.none,
-            enlargeCenterPage: true,
-            enableInfiniteScroll: false,
-          ),
-        ),
-        const SizedBox(height: 12),
-        ValueListenableBuilder(
-          valueListenable: currentIndex,
-          builder: (context, value, child) => AnimatedSmoothIndicator(
-            count: 5,
-            activeIndex: value,
-            effect: ExpandingDotsEffect(
-              spacing: 6,
-              dotWidth: 8,
-              dotHeight: 8,
-              expansionFactor: 2.5,
-              dotColor: context.grey300,
-              activeDotColor: context.primaryContainer,
+                currentIndex.value = index;
+              },
+              height: 220,
+              enlargeFactor: 0.15,
+              viewportFraction: 0.9,
+              clipBehavior: Clip.none,
+              enlargeCenterPage: true,
+              enableInfiniteScroll: false,
             ),
           ),
-        ),
-      ],
+          const SizedBox(height: 12),
+          ValueListenableBuilder(
+            valueListenable: currentIndex,
+            builder: (context, value, child) => AnimatedSmoothIndicator(
+              count: 5,
+              activeIndex: value,
+              effect: ExpandingDotsEffect(
+                spacing: 6,
+                dotWidth: 8,
+                dotHeight: 8,
+                expansionFactor: 2.5,
+                dotColor: context.grey300,
+                activeDotColor: context.primaryContainer,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -301,7 +302,6 @@ class _GenreNames extends ConsumerWidget {
           ),
         );
       },
-
       error: (error, stackTrace) => const SizedBox.shrink(),
       loading: () => const SizedBox.shrink(),
     );
