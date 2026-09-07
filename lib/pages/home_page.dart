@@ -14,8 +14,7 @@ class HomePage extends ConsumerWidget {
   void _refreshProviders(WidgetRef ref) => ref
     ..invalidate(homeMoviesAsyncNotifierProvider)
     ..invalidate(moviesFutureProvider)
-    ..invalidate(genresFutureProvider)
-    ..invalidate(similarMoviesFutureProvider);
+    ..invalidate(genresFutureProvider);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

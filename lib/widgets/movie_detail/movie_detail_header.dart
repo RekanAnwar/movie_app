@@ -129,7 +129,7 @@ class _MovieDetailInfo extends StatelessWidget {
                   ),
                 ],
               ),
-              if (movie.genreIds.isNotEmpty) ...[
+              if (movie.genres.isNotEmpty) ...[
                 const SizedBox(height: 12),
                 _GenreChips(movie: movie),
               ],

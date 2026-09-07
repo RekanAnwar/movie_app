@@ -12,7 +12,7 @@ class Movie extends Equatable {
     this.releaseDate,
     this.posterPath,
     this.backdropPath,
-    this.genreIds = const [],
+    this.genres = const [],
   });
 
   final int id;
@@ -22,7 +22,7 @@ class Movie extends Equatable {
   final DateTime? releaseDate;
   final String? posterPath;
   final String? backdropPath;
-  final List<Genre> genreIds;
+  final List<Genre> genres;
 
   @override
   List<Object?> get props => [
@@ -33,7 +33,7 @@ class Movie extends Equatable {
     releaseDate,
     posterPath,
     backdropPath,
-    genreIds,
+    genres,
   ];
 
   String get fullPosterUrl =>
@@ -41,7 +41,7 @@ class Movie extends Equatable {
   String get fullBackdropUrl =>
       backdropPath != null ? '${Urls.backdropUrl}$backdropPath' : '';
 
-  List<String> genreNames(List<Genre> genres) => genreIds
+  List<String> genreNames(List<Genre> genres) => this.genres
       .map((e) => genres.firstWhereOrNull((genre) => genre.id == e.id)?.name)
       .whereType<String>()
       .toList();
