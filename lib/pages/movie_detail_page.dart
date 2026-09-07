@@ -6,7 +6,7 @@ import 'package:movie_app/providers/providers.dart';
 import 'package:movie_app/utils/utils.dart';
 import 'package:movie_app/widgets/movie_detail/movie_detail.dart';
 
-class MovieDetailPage extends ConsumerWidget {
+class MovieDetailPage extends StatelessWidget {
   const MovieDetailPage({
     super.key,
     required this.movie,
@@ -15,7 +15,7 @@ class MovieDetailPage extends ConsumerWidget {
   final Movie movie;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
         padding: EdgeInsets.zero,
@@ -28,43 +28,7 @@ class MovieDetailPage extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 16),
-                FilledButton(
-                  onPressed: () async => ref
-                      .read(watchlistNotifierProvider.notifier)
-                      .toggle(movie),
-                  style: FilledButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 48),
-                  ),
-                  child: Consumer(
-                    builder: (context, ref, child) {
-                      final isInWatchlist = ref.watch(
-                        watchlistNotifierProvider.select(
-                          (movies) => movies.any(
-                            (m) => m.id == movie.id,
-                          ),
-                        ),
-                      );
-
-                      return Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            isInWatchlist
-                                ? Icons.bookmark_rounded
-                                : Icons.bookmark_outline_rounded,
-                            size: 20,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            isInWatchlist
-                                ? 'Remove from Watchlist'
-                                : 'Add to Watchlist',
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ),
+                _WatchlistButton(movie: movie),
                 const SizedBox(height: 16),
                 if (movie.overview.isNotEmpty) ...[
                   Text(
@@ -86,6 +50,44 @@ class MovieDetailPage extends ConsumerWidget {
                 SizedBox(height: context.paddingBottom + 16),
               ],
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _WatchlistButton extends ConsumerWidget {
+  const _WatchlistButton({required this.movie});
+
+  final Movie movie;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isInWatchlist = ref.watch(
+      watchlistNotifierProvider.select(
+        (movies) => movies.any((m) => m.id == movie.id),
+      ),
+    );
+
+    return FilledButton(
+      onPressed: () async =>
+          ref.read(watchlistNotifierProvider.notifier).toggle(movie),
+      style: FilledButton.styleFrom(
+        minimumSize: const Size(double.infinity, 48),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            isInWatchlist
+                ? Icons.bookmark_rounded
+                : Icons.bookmark_outline_rounded,
+            size: 20,
+          ),
+          const SizedBox(width: 8),
+          Text(
+            isInWatchlist ? 'Remove from Watchlist' : 'Add to Watchlist',
           ),
         ],
       ),
