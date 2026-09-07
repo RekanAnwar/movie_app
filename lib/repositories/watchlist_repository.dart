@@ -32,34 +32,12 @@ class WatchlistRepository {
   }
 
   Future<List<Movie>> toggle(Movie movie) async {
-    var movies = getMovies();
-
+    final movies = getMovies();
     final contains = movies.any((m) => m.id == movie.id);
 
-    if (contains) {
-      movies = await _removeMovie(movie.id);
-    } else {
-      movies = await _addMovie(movie);
-    }
-
-    return movies;
-  }
-
-  Future<List<Movie>> _addMovie(Movie movie) async {
-    final movies = getMovies();
-
-    if (movies.any((m) => m.id == movie.id)) return movies;
-
-    final updated = [movie, ...movies];
-
-    await _saveMovies(updated);
-
-    return updated;
-  }
-
-  Future<List<Movie>> _removeMovie(int id) async {
-    final movies = getMovies();
-    final updated = movies.where((movie) => movie.id != id).toList();
+    final updated = contains
+        ? movies.where((m) => m.id != movie.id).toList()
+        : [movie, ...movies];
 
     await _saveMovies(updated);
 

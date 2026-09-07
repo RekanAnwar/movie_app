@@ -7,6 +7,7 @@ import 'package:movie_app/utils/logging.dart';
 final watchlistNotifierProvider =
     NotifierProvider<WatchlistNotifier, List<Movie>>(
       WatchlistNotifier.new,
+      name: 'watchlistNotifierProvider',
     );
 
 class WatchlistNotifier extends Notifier<List<Movie>> {

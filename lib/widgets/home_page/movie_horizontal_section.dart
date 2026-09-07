@@ -52,12 +52,10 @@ class MovieHorizontalSection extends ConsumerWidget {
               const SizedBox(height: 12),
               SizedBox(
                 height: 210,
-                child: ListView.separated(
+                child: ListView.builder(
                   itemCount: totalResults,
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(width: 20),
                   itemBuilder: (context, index) {
                     final page = index ~/ moviesPageSize + 1;
                     final indexInPage = index % moviesPageSize;
@@ -77,8 +75,11 @@ class MovieHorizontalSection extends ConsumerWidget {
                           return const SizedBox.shrink();
                         }
 
-                        return MovieTile(
-                          movie: pageResponse.data[indexInPage],
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 20),
+                          child: MovieTile(
+                            movie: pageResponse.data[indexInPage],
+                          ),
                         );
                       },
                       error: (error, stackTrace) => indexInPage == 0

@@ -37,11 +37,10 @@ class MovieDetailSimilarSection extends ConsumerWidget {
             const SizedBox(height: 12),
             SizedBox(
               height: 210,
-              child: ListView.separated(
+              child: ListView.builder(
                 clipBehavior: Clip.none,
                 itemCount: totalResults,
                 scrollDirection: Axis.horizontal,
-                separatorBuilder: (context, index) => const SizedBox(width: 12),
                 itemBuilder: (context, index) {
                   final page = index ~/ moviesPageSize + 1;
                   final indexInPage = index % moviesPageSize;
@@ -61,23 +60,15 @@ class MovieDetailSimilarSection extends ConsumerWidget {
                         return const SizedBox.shrink();
                       }
 
-                      return MovieTile(
-                        pushReplacement: true,
-                        movie: pageResponse.data[indexInPage],
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 12),
+                        child: MovieTile(
+                          pushReplacement: true,
+                          movie: pageResponse.data[indexInPage],
+                        ),
                       );
                     },
-                    error: (error, stackTrace) => indexInPage == 0
-                        ? _SimilarMovieTileError(
-                            onRetry: () => ref.invalidate(
-                              similarMoviesFutureProvider(
-                                SimilarMoviesFutureProviderParams(
-                                  movieId: movieId,
-                                  page: page,
-                                ),
-                              ),
-                            ),
-                          )
-                        : const SizedBox.shrink(),
+                    error: (error, stackTrace) => const SizedBox.shrink(),
                     loading: () => const MovieTileShimmer(),
                   );
                 },
@@ -121,36 +112,6 @@ class _SimilarMoviesSectionShimmer extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _SimilarMovieTileError extends StatelessWidget {
-  const _SimilarMovieTileError({required this.onRetry});
-
-  final VoidCallback onRetry;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 140,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.error_outline_rounded,
-            color: context.grey500,
-          ),
-          const SizedBox(height: 8),
-          TextButton(
-            onPressed: onRetry,
-            style: TextButton.styleFrom(
-              foregroundColor: context.primaryContainer,
-            ),
-            child: const Text('Retry'),
-          ),
-        ],
-      ),
     );
   }
 }

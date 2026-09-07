@@ -159,29 +159,30 @@ class _GenreChips extends ConsumerWidget {
         return Wrap(
           spacing: 8,
           runSpacing: 8,
-          children: [
-            for (final name in genreNames)
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  border: Border.all(color: context.grey300),
-                  color: context.grey200,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(100),
+          children: genreNames
+              .map(
+                (name) => Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: context.grey300),
+                    color: context.grey200,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(100),
+                    ),
+                  ),
+                  child: Text(
+                    name,
+                    style: context.labelMedium?.copyWith(
+                      color: context.grey700,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
-                child: Text(
-                  name,
-                  style: context.labelMedium?.copyWith(
-                    color: context.grey700,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-          ],
+              )
+              .toList(),
         );
       },
       error: (error, stackTrace) => const SizedBox.shrink(),

@@ -82,7 +82,7 @@ class _WatchlistButton extends ConsumerWidget {
           Icon(
             isInWatchlist
                 ? Icons.bookmark_rounded
-                : Icons.bookmark_outline_rounded,
+                : Icons.bookmark_border_outlined,
             size: 20,
           ),
           const SizedBox(width: 8),
