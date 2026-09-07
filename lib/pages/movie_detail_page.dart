@@ -19,6 +19,7 @@ class MovieDetailPage extends StatelessWidget {
     return Scaffold(
       body: ListView(
         padding: EdgeInsets.zero,
+        physics: const ClampingScrollPhysics(),
         children: [
           MovieDetailHeader(movie: movie),
           const SizedBox(height: 50),

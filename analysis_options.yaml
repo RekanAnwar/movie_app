@@ -3,7 +3,6 @@ include: package:lints/recommended.yaml
 linter:
   rules:
     public_member_api_docs: false
-    sort_pub_dependencies: true
     cancel_subscriptions: true
     sort_constructors_first: true
     always_declare_return_types: true
