@@ -51,7 +51,7 @@ cd movie_app
 
 ### 2. Use Flutter 3.44.9
 
-With **FVM** (this repo includes `.fvmrc`):
+With **FVM**
 
 ```bash
 fvm install
